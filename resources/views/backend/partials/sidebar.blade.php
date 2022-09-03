@@ -2,7 +2,7 @@
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
-                <li class=" @if (request()->is('/')) active @endif"> <a href="{{ route('home') }}"><i
+                <li class=" @if (request()->is('app')) active @endif"> <a href="{{ route('home') }}"><i
                             class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span></a> </li>
                 <li class="list-divider"></li>
@@ -14,25 +14,19 @@
                         <li><a href="add-booking.html"> Add Booking </a></li>
                     </ul>
                 </li>
-                <li class="submenu @if (request()->is('customers')) active @else @endif"> <a href="#"><i
+                <li class="submenu @if (request()->is('app/customer-management/customers')) active @else @endif"> <a href="#"><i
                             class="fas fa-user"></i> <span> Customers </span> <span class="menu-arrow"></span></a>
                     <ul class="submenu_class"
-                        style="
-                       @if (request()->is('customers')) display: block;
-                        @else
-                        display: none;" @endif>
+                        style=" @if (request()->is('app/customer-management/customers')) display: block; @else display: none;" @endif>
                         <li><a href="{{ route('customers.index') }}">
                         All customers </a>
                 </li>
             </ul>
             </li>
-            <li class="submenu @if (request()->is('room') || request()->is('allRooms')) active @else @endif"> <a href="#"><i
+            <li class="submenu @if (request()->is('app/room-management/room') || request()->is('app/room-management/allRooms')) active @else @endif"> <a href="#"><i
                         class="fas fa-key"></i> <span> Rooms </span> <span class="menu-arrow"></span></a>
                 <ul class="submenu_class"
-                    style="
-                    @if (request()->is('room')) display: block;
-                    @else
-                    display: none;" @endif>
+                    style=" @if (request()->is('app/room-management/room')) display: block; @else display: none;" @endif>
                         <li><a href="{{ route('room.index') }}">
                     Room Type</a>
             </li>

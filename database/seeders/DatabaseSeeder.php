@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call([
+            AdminSeeder::class
+        ]);
+
         RoomType::factory(10)->create();
         Room::factory(20)->create();
         Customer::factory(20)->create();
