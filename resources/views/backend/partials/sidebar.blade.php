@@ -27,18 +27,20 @@
                         class="fas fa-key"></i> <span> Rooms </span> <span class="menu-arrow"></span></a>
                 <ul class="submenu_class"
                     style=" @if (request()->is('app/room-management/room')) display: block; @else display: none;" @endif>
-                        <li><a href="{{ route('room.index') }}">
-                    Room Type</a>
+                        <li><a href="{{ route('room.index') }}">Room Type</a></li>
+                        <li><a href="{{ route('allRooms') }}"> Rooms </a></li>
+                </ul>
             </li>
-            <li><a href="{{ route('allRooms') }}"> Rooms </a></li>
-            </ul>
-            </li>
-            <li class="submenu"> <a href="#"><i class="fas fa-user"></i> <span> Staff </span> <span
+            <li class="submenu"> <a href="#"><i class="fa fa-puzzle-piece"></i> <span> Departments </span> <span
                         class="menu-arrow"></span></a>
                 <ul class="submenu_class" style="display: none;">
-                    <li><a href="all-staff.html">All Staff </a></li>
-                    <li><a href="edit-staff.html"> Edit Staff </a></li>
-                    <li><a href="add-staff.html"> Add Staff </a></li>
+                    <li><a href="{{ route('departments.index') }}">All Departments </a></li>
+                </ul>
+            </li>
+            <li class="submenu"> <a href="#"><i class="fas fa-user"></i> <span> Staff </span> <span
+                class="menu-arrow"></span></a>
+                <ul class="submenu_class" style="display: none;">
+                    <li><a href="{{ route('staff.index') }}">All Staff </a></li>
                 </ul>
             </li>
             <li> <a href="pricing.html"><i class="far fa-money-bill-alt"></i> <span>Pricing</span></a> </li>

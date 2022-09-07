@@ -5,7 +5,7 @@
             <div class="col-sm-12 mt-5">
                 <h3 class="page-title mt-3">Good Morning Soeng Souy!</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item active">All Customers</li>
+                    <li class="breadcrumb-item active">All Stuff</li>
                 </ul>
             </div>
         </div>
@@ -16,7 +16,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Customer </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Stuff </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -40,51 +40,57 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Email</label>
-                                                <input type="email" class="form-control" placeholder="johnDoe@email.com"
-                                                    name="email" id="email">
+                                                <label>Department</label>
+                                                <select class="form-control" name="department_id" id="exampleFormControlSelect1">
+                                                    <option value="" selected>Select Department</option>
+                                                    @foreach($allDept as $department)
+                                                    <option value="{{ $department->id }}">{{ $department->title }}</option>
+                                                    @endforeach
+                                                  </select>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Mobile</label>
-                                                <input type="text" class="form-control" name="mobile" id="mobile">
+                                                <label>Bio</label>
+                                                <textarea name="bio" id="summernote" cols="30" rows="10"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Address</label>
-                                                <input type="text" class="form-control" name="address" id="address">
+                                                <label>Salary Type</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="salary_type" id="exampleRadios1" value="daily">
+                                                    <label class="form-check-label" for="exampleRadios1">
+                                                      Daily
+                                                    </label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="salary_type" id="exampleRadios2" value="monthly">
+                                                    <label class="form-check-label" for="exampleRadios2">
+                                                     Monthly
+                                                    </label>
+                                                  </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Password</label>
-                                                <input type="password" class="form-control" name="password" id="password">
+                                                <label>Salary Amount</label>
+                                                <input type="number" class="form-control" name="salary_amt" id="salary_amt">
                                             </div>
                                         </div>
 
-                                        {{-- <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>File Upload</label>
-                                                <div class="custom-file mb-3">
-                                                    <input type="file" class="custom-file-input" id="file-input" multiple
-                                                        name="photo">
-                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                        <div class="col-lg-12">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                  <span class="input-group-text">Upload</span>
                                                 </div>
-                                                <div id="thumb-output"></div>
+                                                <div class="custom-file">
+                                                  <input type="file" class="custom-file-input"  multiple name="photo" id="photo"
+                                                  placeholder="Choose photo" accept="image/*">
+                                                  <label class="custom-file-label" for="inputGroupFile01">Upload Photo</label>
+                                                </div>
                                             </div>
-                                        </div> --}}
-
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <input type="file" class="form-control" name="photo" id="photo"
-                                                    placeholder="Choose photo">
-                                            </div>
-                                            {{-- @error('photo')
-                                                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                                            @enderror --}}
                                         </div>
 
                                         <div class="col-md-12">
@@ -111,7 +117,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Customer </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Staff </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -131,38 +137,52 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Full Name</label>
-                                                <input class="form-control" type="text" id="full_name"
-                                                    name="full_name" placeholder="Full name">
+                                                <input class="form-control" type="text" name="full_name" id="full_name"
+                                                    placeholder="Customer name">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Email</label>
-                                                <input class="form-control" type="email" id="emailID" name="email"
-                                                    placeholder="johndoe@gmail.com">
+                                                <label>Department</label>
+                                                <select class="form-control" name="department_id" id="department_id">
+                                                    <option value="" selected>Select Department</option>
+                                                    @foreach($allDept as $department)
+                                                    <option value="{{ $department->id }}">{{ $department->title }}</option>
+                                                    @endforeach
+                                                  </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Bio</label>
+                                                <textarea class="bio" name="bio" id="summernote" cols="30" rows="10"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Mobile</label>
-                                                <input class="form-control " type="text" id="mobileNumber"
-                                                    name="mobile" placeholder="Mobile number">
+                                                <label>Salary Type</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="salary_type" id="salary_type" value="daily">
+                                                    <label class="form-check-label" for="exampleRadios1">
+                                                      Daily
+                                                    </label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="salary_type" id="salary_type" value="monthly">
+                                                    <label class="form-check-label" for="exampleRadios2">
+                                                     Monthly
+                                                    </label>
+                                                  </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Address</label>
-                                                <input class="form-control" type="text" id="customerAddress"
-                                                    name="address" placeholder="Address">
+                                                <label>Salary Amount</label>
+                                                <input type="number" class="form-control" name="salary_amt" id="salary_amount">
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Password</label>
-                                                <input class="form-control" type="password" id="customerPassword"
-                                                    name="password" placeholder="Password">
-                                            </div>
-                                        </div>
+
 
                                         <div class="col-lg-12">
                                             <div class="form-group">
@@ -181,8 +201,8 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mt-1">
-                                                <label for="">Previous photo</label>
-                                                <div id="previous-images"> </div>
+                                                <label>Previous photo</label>
+                                                <div id="previous-images"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -199,14 +219,46 @@
         </div>
     </div>
     {{-- End edit modal --}}
+    {{-- view modal --}}
+    <div class="modal fade modal-view" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="show_name" > </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="salary type">Salary Type:</label>
+                                <p id="show_salary_type"></p>
+                               </div>
+                               <div class="col-lg-6">
+                                <label for="salary amount">Salary Amount:</label>
+                                <p id="show_salary_amn"></p>
+                            </div>
+                        </div>
+
+                        <h4>Bio:</h4>
+                        <p id="show_bio"></p>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End view modal --}}
     <div class="row">
         <div class="col-md-12 d-flex">
             <div class="card card-table flex-fill">
                 <div class="card-header">
-                    <h4 class="card-title float-left mt-2">All Customers</h4>
+                    <h4 class="card-title float-left mt-2">All Stuff</h4>
                     <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                         data-target=".create-modal">
-                        <span class="fas fa-plus"></span> Add Customers
+                        <span class="fas fa-plus"></span> Add Stuff
                     </button>
                 </div>
                 <div class="card-body p-2">
@@ -215,31 +267,39 @@
                             <thead>
                                 <tr>
                                     <th>#Sl</th>
+                                    <th>Photo</th>
                                     <th>Full Name</th>
-                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Department</th>
+                                    
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($allCustomers as $key => $item)
+                                @foreach ($getData as $key => $item)
                                     <tr>
                                         <th class="text-nowrap">{{ $key + 1 }}</th>
+                                        
+                                        <td class="text-nowrap">
+                                            <img src="{{ asset('assets/img/staff/'.$item->photo) }}" style="width: 100px"  alt="" srcset="">
+                                        </td>
                                         <td class="text-nowrap">
                                             <div>{{ $item->full_name }}</div>
                                         </td>
                                         <td class="text-nowrap">
-                                            <div>{{ $item->email }}</div>
+                                            <div>{{ $item->department->title }}</div>
                                         </td>
-
+                                       
                                         <td class="d-flex">
-                                            <a href="{{ route('customers.show', $item->id) }}"
-                                                class="btn btn-primary btn-sm mr-2"><span class="fas fa-eye"></span></a>
-
+                                            
+                                            <button class="btn btn-sm btn-primary mr-2 viewButton"
+                                                value="{{ $item->id }}"data-toggle="modal"
+                                                data-target=".modal-view" ><span class="fas fa-eye"></span>
+                                            </button>
                                             <button class="btn btn-sm btn-warning mr-2 editButton"
                                                 value="{{ $item->id }}"data-toggle="modal"
                                                 data-target=".modal-edit"><span class="fas fa-pen"></span>
                                             </button>
-                                            <form action="{{ route('customers.destroy', $item->id) }}" method="post">
+                                            <form action="{{ route('staff.destroy', $item->id) }}" method="post">
                                                 @method('delete')
                                                 @csrf
                                                 <button class="btn btn-sm btn-danger deleteButton"
@@ -263,7 +323,7 @@
     <script>
         $(document).ready(function() {
 
-            // multiple image preview for create customer
+            //  image preview for create customer
             $(function() {
                 var previewImages = function(input, imgPreviewPlaceholder) {
                     if (input.files) {
@@ -271,7 +331,7 @@
                         for (i = 0; i < filesAmount; i++) {
                             var reader = new FileReader();
                             reader.onload = function(event) {
-                                $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(
+                                $($.parseHTML('<img style="width:70px;">')).attr('src', event.target.result).appendTo(
                                     imgPreviewPlaceholder);
                             }
                             reader.readAsDataURL(input.files[i]);
@@ -291,7 +351,7 @@
                         for (i = 0; i < filesAmount; i++) {
                             var reader = new FileReader();
                             reader.onload = function(event) {
-                                $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(
+                                $($.parseHTML('<img style="width:70px;">')).attr('src', event.target.result).appendTo(
                                     imgPreviewPlaceholder);
                             }
                             reader.readAsDataURL(input.files[i]);
@@ -312,7 +372,7 @@
                 $('.saveButton').html('<span class="spinner-border spinner-border-sm"></span>')
                 $.ajax({
                     type: "post",
-                    url: "{{ route('customers.store') }}",
+                    url: "{{ route('staff.store') }}",
                     data: new FormData(this),
                     contentType: false,
                     cache: false,
@@ -357,38 +417,58 @@
             });
 
             // status 
-            $('input[name=toggle]').change(function() {
-                var mode = $(this).prop('checked')
-                var id = $(this).val();
+            // $('input[name=toggle]').change(function() {
+            //     var mode = $(this).prop('checked')
+            //     var id = $(this).val();
+            //     $.ajax({
+            //         type: "post",
+            //         url: "{{ route('roomStatus') }}",
+            //         data: {
+            //             _token: '{{ csrf_token() }}',
+            //             mode: mode,
+            //             id: id
+            //         },
+            //         success: function(response) {
+            //             // console.log(response);
+            //             if (response.status == 200) {
+            //                 const Toast = Swal.mixin({
+            //                     toast: true,
+            //                     position: 'top-end',
+            //                     showConfirmButton: false,
+            //                     timer: 3000,
+            //                     timerProgressBar: true,
+            //                     didOpen: (toast) => {
+            //                         toast.addEventListener('mouseenter', Swal
+            //                             .stopTimer)
+            //                         toast.addEventListener('mouseleave', Swal
+            //                             .resumeTimer)
+            //                     }
+            //                 })
+            //                 Toast.fire({
+            //                     icon: 'success',
+            //                     title: response.message
+            //                 })
+            //             }
+            //         }
+            //     });
+            // });
+
+
+            // view
+            $('.viewButton').click(function (e) { 
+                e.preventDefault();
+                var id =$(this).val();
+                var url="{{ route('staff.show',':id') }}";
+                url = url.replace(':id',id);
                 $.ajax({
-                    type: "post",
-                    url: "{{ route('roomStatus') }}",
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        mode: mode,
-                        id: id
-                    },
-                    success: function(response) {
+                    type: "get",
+                    url: url,
+                    success: function (response) {
                         // console.log(response);
-                        if (response.status == 200) {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal
-                                        .stopTimer)
-                                    toast.addEventListener('mouseleave', Swal
-                                        .resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'success',
-                                title: response.message
-                            })
-                        }
+                        $('#show_name').text(response.full_name)
+                        $('#show_salary_type').text(response.salary_type)
+                        $('#show_salary_amn').text('BDT: '+response.salary_amt)
+                        $('#show_bio').html(response.bio).text()
                     }
                 });
             });
@@ -398,24 +478,24 @@
                 $('.editButton').click(function(e) {
                     e.preventDefault();
                     var id = $(this).val();
-                    var asset_path= "{{ asset('assets/img/customer/') }}"
+                    var asset_path = '{{ asset('assets/img/staff/') }}'
                     var url =
-                    "{{ route('customers.edit', ':id') }}"; //resource route  parameter passed
+                    "{{ route('staff.edit', ':id') }}"; //resource route  parameter passed
                     url = url.replace(':id', id); //resource route  parameter passed
+
                     $.ajax({
                         type: "get",
                         url: url, //passing id with route name
                         success: function(response) {
-                            // console.log(response.mobile);
+                            // console.log(response);
                             $('#id').val(response.id);
                             $('#full_name').val(response.full_name);
-                            $('#customerAddress').val(response.address);
-                            $('#mobileNumber').val(response.mobile);
-                            $('#emailID').val(response.email);
-                            $('#customerPassword').val(response.password);
+                            $('#department_id').val(response.department_id);
+                            $('.bio').val(response.bio);
+                            $('#salary_type').val(response.salary_type);
+                            $('#salary_amount').val(response.salary_amt);
                             $('#previous-images').html(
-                                ' <img style="width:100px;height:100px" src="'+asset_path+'/'+
-                                response.photo + '" >');
+                                '<img style="width:100px;" src="'+asset_path+'/'+response.photo+'">');
                         }
                     });
                 });
@@ -427,7 +507,7 @@
                     // console.log(id);
                     $('.updateButton').html(
                         '<span class="spinner-border spinner-border-sm"></span>')
-                    var url = "{{ route('customers.update', ':id') }}"
+                    var url = "{{ route('staff.update', ':id') }}"
                     url = url.replace(':id', id);
                     $.ajax({
                         type: "post",
@@ -438,6 +518,7 @@
                         cache: false,
                         processData: false,
                         success: function(response) {
+                            console.log(response);
                             if (response.status == 200) {
                                 $("#updateForm")[0].reset();
                                 $('.modal-edit').modal('hide');

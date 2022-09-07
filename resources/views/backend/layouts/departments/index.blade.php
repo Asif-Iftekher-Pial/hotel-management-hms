@@ -5,7 +5,7 @@
             <div class="col-sm-12 mt-5">
                 <h3 class="page-title mt-3">Good Morning Soeng Souy!</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item active">All Customers</li>
+                    <li class="breadcrumb-item active">All Departments</li>
                 </ul>
             </div>
         </div>
@@ -16,14 +16,14 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Customer </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Department </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="col-lg-12">
-                        <form id="createForm" enctype="multipart/form-data">
+                        <form id="createForm">
                             @csrf
                             <div class="row">
                                 <ul id="save_msgList">
@@ -33,63 +33,15 @@
                                     <div class="row formtype">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Full Name</label>
-                                                <input class="form-control" type="text" name="full_name"
-                                                    placeholder="Customer name">
+                                                <label>Department Title</label>
+                                                <input class="form-control" type="text" name="title"
+                                                    placeholder="Department name">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Email</label>
-                                                <input type="email" class="form-control" placeholder="johnDoe@email.com"
-                                                    name="email" id="email">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Mobile</label>
-                                                <input type="text" class="form-control" name="mobile" id="mobile">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Address</label>
-                                                <input type="text" class="form-control" name="address" id="address">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Password</label>
-                                                <input type="password" class="form-control" name="password" id="password">
-                                            </div>
-                                        </div>
-
-                                        {{-- <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>File Upload</label>
-                                                <div class="custom-file mb-3">
-                                                    <input type="file" class="custom-file-input" id="file-input" multiple
-                                                        name="photo">
-                                                    <label class="custom-file-label" for="customFile">Choose file</label>
-                                                </div>
-                                                <div id="thumb-output"></div>
-                                            </div>
-                                        </div> --}}
-
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <input type="file" class="form-control" name="photo" id="photo"
-                                                    placeholder="Choose photo">
-                                            </div>
-                                            {{-- @error('photo')
-                                                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                                            @enderror --}}
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="mt-1">
-                                                <div class="images-preview-div"> </div>
+                                                <label>Detail</label>
+                                                <textarea name="detail" id="summernote" cols="30" rows="10"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +63,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Customer </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Department </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -130,60 +82,16 @@
                                     <div class="row formtype">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Full Name</label>
-                                                <input class="form-control" type="text" id="full_name"
-                                                    name="full_name" placeholder="Full name">
+                                                <label>Department Name</label>
+                                                <input class="form-control" type="text" id="title"
+                                                    name="title" placeholder="Department name">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Email</label>
-                                                <input class="form-control" type="email" id="emailID" name="email"
-                                                    placeholder="johndoe@gmail.com">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Mobile</label>
-                                                <input class="form-control " type="text" id="mobileNumber"
-                                                    name="mobile" placeholder="Mobile number">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Address</label>
-                                                <input class="form-control" type="text" id="customerAddress"
-                                                    name="address" placeholder="Address">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Password</label>
-                                                <input class="form-control" type="password" id="customerPassword"
-                                                    name="password" placeholder="Password">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input type="file" class="form-control" name="photo"
-                                                    id="Edit_photo" placeholder="Choose photo">
-                                            </div>
-                                            {{-- @error('photo')
-                                                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                                            @enderror --}}
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="mt-1">
-                                                <div class="edit-images"> </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mt-1">
-                                                <label for="">Previous photo</label>
-                                                <div id="previous-images"> </div>
-                                            </div>
+                                                <label>Detail</label>
+                                                <textarea class="form-control detail" name="detail" id="summernote" cols="30" rows="10"></textarea>
+                                                </div>
                                         </div>
                                     </div>
                                 </div>
@@ -203,10 +111,10 @@
         <div class="col-md-12 d-flex">
             <div class="card card-table flex-fill">
                 <div class="card-header">
-                    <h4 class="card-title float-left mt-2">All Customers</h4>
+                    <h4 class="card-title float-left mt-2">All Departments</h4>
                     <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                         data-target=".create-modal">
-                        <span class="fas fa-plus"></span> Add Customers
+                        <span class="fas fa-plus"></span> Add Department
                     </button>
                 </div>
                 <div class="card-body p-2">
@@ -215,31 +123,27 @@
                             <thead>
                                 <tr>
                                     <th>#Sl</th>
-                                    <th>Full Name</th>
-                                    <th class="text-center">Email</th>
+                                    <th>Name</th>
+                                    <th class="text-center">Detail</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($allCustomers as $key => $item)
+                                @foreach ($getData as $key => $item)
                                     <tr>
                                         <th class="text-nowrap">{{ $key + 1 }}</th>
                                         <td class="text-nowrap">
-                                            <div>{{ $item->full_name }}</div>
+                                            <div>{{ substr_replace($item->title, '...', 20) }}</div>
                                         </td>
                                         <td class="text-nowrap">
-                                            <div>{{ $item->email }}</div>
+                                            <div>{!! html_entity_decode(substr_replace($item->detail, '...', 20)) !!}</div>
                                         </td>
-
                                         <td class="d-flex">
-                                            <a href="{{ route('customers.show', $item->id) }}"
-                                                class="btn btn-primary btn-sm mr-2"><span class="fas fa-eye"></span></a>
-
                                             <button class="btn btn-sm btn-warning mr-2 editButton"
                                                 value="{{ $item->id }}"data-toggle="modal"
                                                 data-target=".modal-edit"><span class="fas fa-pen"></span>
                                             </button>
-                                            <form action="{{ route('customers.destroy', $item->id) }}" method="post">
+                                            <form action="{{ route('departments.destroy', $item->id) }}" method="post">
                                                 @method('delete')
                                                 @csrf
                                                 <button class="btn btn-sm btn-danger deleteButton"
@@ -263,48 +167,9 @@
     <script>
         $(document).ready(function() {
 
-            // multiple image preview for create customer
-            $(function() {
-                var previewImages = function(input, imgPreviewPlaceholder) {
-                    if (input.files) {
-                        var filesAmount = input.files.length;
-                        for (i = 0; i < filesAmount; i++) {
-                            var reader = new FileReader();
-                            reader.onload = function(event) {
-                                $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(
-                                    imgPreviewPlaceholder);
-                            }
-                            reader.readAsDataURL(input.files[i]);
-                        }
-                    }
-                };
-                $('#photo').on('change', function() {
-                    previewImages(this, 'div.images-preview-div');
-                });
-            });
-            // multiple image preview for edit customer
-
-            $(function() {
-                var previewImages = function(input, imgPreviewPlaceholder) {
-                    if (input.files) {
-                        var filesAmount = input.files.length;
-                        for (i = 0; i < filesAmount; i++) {
-                            var reader = new FileReader();
-                            reader.onload = function(event) {
-                                $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(
-                                    imgPreviewPlaceholder);
-                            }
-                            reader.readAsDataURL(input.files[i]);
-                        }
-                    }
-                };
-                $('#Edit_photo').on('change', function() {
-                    previewImages(this, 'div.edit-images');
-                });
-            });
 
 
-            // create new customer
+            // create new dept
 
             $('#createForm').on('submit', function(e) {
                 e.preventDefault();
@@ -312,7 +177,7 @@
                 $('.saveButton').html('<span class="spinner-border spinner-border-sm"></span>')
                 $.ajax({
                     type: "post",
-                    url: "{{ route('customers.store') }}",
+                    url: "{{ route('departments.store') }}",
                     data: new FormData(this),
                     contentType: false,
                     cache: false,
@@ -356,51 +221,14 @@
                 });
             });
 
-            // status 
-            $('input[name=toggle]').change(function() {
-                var mode = $(this).prop('checked')
-                var id = $(this).val();
-                $.ajax({
-                    type: "post",
-                    url: "{{ route('roomStatus') }}",
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        mode: mode,
-                        id: id
-                    },
-                    success: function(response) {
-                        // console.log(response);
-                        if (response.status == 200) {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal
-                                        .stopTimer)
-                                    toast.addEventListener('mouseleave', Swal
-                                        .resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'success',
-                                title: response.message
-                            })
-                        }
-                    }
-                });
-            });
+           
 
             // edit
             $(document).ready(function() {
                 $('.editButton').click(function(e) {
                     e.preventDefault();
                     var id = $(this).val();
-                    var asset_path= "{{ asset('assets/img/customer/') }}"
-                    var url =
-                    "{{ route('customers.edit', ':id') }}"; //resource route  parameter passed
+                    var url ="{{ route('departments.edit', ':id') }}"; //resource route  parameter passed
                     url = url.replace(':id', id); //resource route  parameter passed
                     $.ajax({
                         type: "get",
@@ -408,14 +236,8 @@
                         success: function(response) {
                             // console.log(response.mobile);
                             $('#id').val(response.id);
-                            $('#full_name').val(response.full_name);
-                            $('#customerAddress').val(response.address);
-                            $('#mobileNumber').val(response.mobile);
-                            $('#emailID').val(response.email);
-                            $('#customerPassword').val(response.password);
-                            $('#previous-images').html(
-                                ' <img style="width:100px;height:100px" src="'+asset_path+'/'+
-                                response.photo + '" >');
+                            $('#title').val(response.title);
+                            $('.detail').val(response.detail);
                         }
                     });
                 });
@@ -427,7 +249,7 @@
                     // console.log(id);
                     $('.updateButton').html(
                         '<span class="spinner-border spinner-border-sm"></span>')
-                    var url = "{{ route('customers.update', ':id') }}"
+                    var url = "{{ route('departments.update', ':id') }}"
                     url = url.replace(':id', id);
                     $.ajax({
                         type: "post",

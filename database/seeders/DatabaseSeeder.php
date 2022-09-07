@@ -5,9 +5,11 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Customer;
+use App\Models\Department;
 use App\Models\Room;
 use App\Models\RoomType;
 use App\Models\RoomTypeImage;
+use App\Models\Staff;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -27,6 +29,8 @@ class DatabaseSeeder extends Seeder
         Room::factory(20)->create();
         Customer::factory(20)->create();
         RoomTypeImage::factory(30)->create();
+        Department::factory(10)->create();
+        Staff::factory(20)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
