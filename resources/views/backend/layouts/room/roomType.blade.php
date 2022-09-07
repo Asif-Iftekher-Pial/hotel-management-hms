@@ -50,28 +50,21 @@
                                             </div>
                                         </div>
 
-                                        {{-- <div class="col-lg-12">
+                                        <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Status</label>
-                                                <select class="form-control" id="sel" name="status">
-                                                    <option selected>Select</option>
-                                                    <option value="active">Active</option>
-                                                    <option value="inactive">Inactive</option>
-                                                </select>
+                                                <input type="file" class="form-control" multiple name="imgs[]" id="photo"
+                                                    placeholder="Choose photo" accept="image/*">
                                             </div>
-                                        </div> --}}
+                                            {{-- @error('photo')
+                                                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                            @enderror --}}
+                                        </div>
 
-                                        {{-- <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>File Upload</label>
-                                                <div class="custom-file mb-3">
-                                                    <input type="file" class="custom-file-input" id="file-input"
-                                                        multiple name="room_image">
-                                                    <label class="custom-file-label" for="customFile">Choose file</label>
-                                                </div>
-                                                <div id="thumb-output"></div>
+                                        <div class="col-md-12">
+                                            <div class="mt-1">
+                                                <div class="images-preview-div"> </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -128,28 +121,24 @@
                                                 <textarea name="detail" class="detail" id="summernote"></textarea>
                                             </div>
                                         </div>
-
-                                        {{-- <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Status</label>
-                                                <select class="form-control" id="status" name="status">
-                                                    <option value="active">Active</option>
-                                                    <option value="inactive">Inactive</option>
-                                                </select>
-                                            </div>
-                                        </div> --}}
-
-                                        {{-- <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>File Upload</label>
-                                                <div class="custom-file mb-3">
-                                                    <input type="file" class="custom-file-input" id="file-input"
-                                                        multiple name="room_image">
-                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                        <div class="col-lg-12">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                  <span class="input-group-text">Upload</span>
                                                 </div>
-                                                <div id="thumb-output"></div>
+                                                <div class="custom-file">
+                                                  <input type="file" class="custom-file-input"  multiple name="imgs[]" id="editphoto"
+                                                  placeholder="Choose photo" accept="image/*">
+                                                  <label class="custom-file-label" for="inputGroupFile01">Upload more photo</label>
+                                                </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mt-1">
+                                                <div class="edit-images"> </div>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +160,7 @@
                     <h4 class="card-title float-left mt-2">Booking</h4>
                     <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                         data-target=".bd-example-modal-lg">
-                        <span class="fas fa-plus"></span> Add New Room
+                        <span class="fas fa-plus"></span> Room Type
                     </button>
                 </div>
                 <div class="card-body p-2">
@@ -182,7 +171,7 @@
                                     <th>Title</th>
                                     <th>Price</th>
                                     <th>Detail</th>
-                                    {{-- <th class="text-center">Status</th> --}}
+                                    <th class="text-center">Gallery</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -196,12 +185,12 @@
                                             <div>BDT-{{ $item->price }}</div>
                                         </td>
                                         <td class="text-nowrap">{!! html_entity_decode(substr_replace($item->detail, '...', 20)) !!}</td>
-                                        {{-- <td class="text-center">
-                                            <input type="checkbox" name="toggle" value="{{ $item->id }}"
-                                                data-toggle="toggle" {{ $item->status == 'active' ? 'checked' : '' }}
-                                                data-on="Active" data-off="Inactive" data-onstyle="success"
-                                                data-offstyle="danger">
-                                        </td> --}}
+                                        <td class="text-center">
+                                            <div class="d-flex">
+                                                <p class="text-danger mr-3">{{ count($item->room_type_image) }}</p>
+                                                <a href="{{ route('roomTypeImages',$item->id) }}" class="btn btn-sm btn-info" style="padding-top: 6px;"><i class="fas fa-images" style="font-size: 25px;"></i></span></a>
+                                            </div>
+                                        </td>
                                         <td class="d-flex">
                                             <button class="btn btn-sm btn-warning mr-2 editButton"
                                                 value="{{ $item->id }}"data-toggle="modal"
@@ -230,6 +219,47 @@
 @section('backend_script')
     <script>
         $(document).ready(function() {
+
+              // multiple image preview 
+              $(function() {
+                var previewImages = function(input, imgPreviewPlaceholder) {
+                    if (input.files) {
+                        var filesAmount = input.files.length;
+                        for (i = 0; i < filesAmount; i++) {
+                            var reader = new FileReader();
+                            reader.onload = function(event) {
+                                $($.parseHTML('<img style="width:70px;">')).attr('src', event.target.result).appendTo(
+                                    imgPreviewPlaceholder);
+                            }
+                            reader.readAsDataURL(input.files[i]);
+                        }
+                    }
+                };
+                $('#photo').on('change', function() {
+                    previewImages(this, 'div.images-preview-div');
+                });
+            });
+            // multiple image preview for edit 
+
+            $(function() {
+                var previewImages = function(input, imgPreviewPlaceholder) {
+                    if (input.files) {
+                        var filesAmount = input.files.length;
+                        for (i = 0; i < filesAmount; i++) {
+                            var reader = new FileReader();
+                            reader.onload = function(event) {
+                                $($.parseHTML('<img style="width:70px;">')).attr('src', event.target.result).appendTo(
+                                    imgPreviewPlaceholder);
+                            }
+                            reader.readAsDataURL(input.files[i]);
+                        }
+                    }
+                };
+                $('#editphoto').on('change', function() {
+                    previewImages(this, 'div.edit-images');
+                });
+            });
+
             // status 
             $('input[name=toggle]').change(function() {
                 var mode = $(this).prop('checked')
@@ -306,6 +336,7 @@
                         cache: false,
                         processData: false,
                         success: function(response) {
+                            console.log(response);
                             if (response.status == 200) {
                                 $('.modal-edit').modal('hide');
                                 const Toast = Swal.mixin({

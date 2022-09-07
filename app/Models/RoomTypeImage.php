@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RoomType extends Model
+class RoomTypeImage extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'title','detail','price'
+        'room_type_id' ,'photo','photo_title'
     ];
+
     
-    public function room_type_image()
-    {
-        return $this->hasMany(RoomTypeImage::class,'room_type_id','id');
-    }
 }

@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\RoomTypeImage;
 use Illuminate\Support\Facades\Validator;
 
 class RoomController extends Controller
@@ -41,14 +42,37 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        // dd($request->all());
+        $request->validate([
             'title' => 'string|required',
             'price' =>'numeric|required',
             'detail' => 'string|required',
+            // 'imgs' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         // $data['detail'] = html_entity_decode($request->detail);
         // dd($data['detail']);
-        $status = RoomType::create($data);
+        $status = RoomType::create([
+            'title' => $request->title,
+            'price' => $request->price,
+            'detail' => $request->detail,
+        ]);
+        if($request->has('imgs')){
+            // dd('ok');
+            foreach ($request->file('imgs') as  $img) {
+                # code...
+                // dd($img);
+                $filename= date('Ymdhms').rand(1,1000).'.'.$img->getClientOriginalExtension();
+                // dd($filename);
+                $img->move(public_path('assets/img/roomTypeImages/'),$filename);
+                RoomTypeImage::create([
+                    'room_type_id' =>$status->id,
+                    'photo'=>$filename,
+                    'photo_title' =>$status->title
+                ]);
+            }
+        }
+
+
         if ($status) {
             $notification = array(
                 // 'T-messege' => 'welcome '.$request->name.'!',
@@ -63,6 +87,25 @@ class RoomController extends Controller
                 'alert-type' => 'error'
             );
             return back()->with($notification);
+        }
+    }
+    public function roomTypeImagesDelete($id){
+        $deleteImage=RoomTypeImage::where('id',$id)->first();
+        if($deleteImage) {
+        @unlink(public_path('assets/img/roomTypeImages/'.$deleteImage->photo));
+            $deleteImage->delete();
+            return response()->json(['status'=>200,'message' =>'deleted successfully!']);
+        }else{
+            abort(404);
+        }
+    }
+    public function roomTypeImages($id){
+        $galleries= RoomType::where('id',$id)->with('room_type_image')->first();
+        //  dd($galleries);
+        if($galleries){
+            return view('backend.layouts.room.gallery',compact('galleries'));
+        }else{
+            abort(404);
         }
     }
 
@@ -102,7 +145,7 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return $request->all();
+        //   dd($request->all());
         $validate = Validator::make($request->all(), [
             'title' => 'required|string',
             'price' =>'numeric|required',
@@ -111,12 +154,28 @@ class RoomController extends Controller
         if ($validate->fails()) {
             return response()->json(['error' => $validate->errors()->all()]);
         } else {
-            $data = RoomType::where('id', $request->id)->first();
-            $data = $data->update([
+            
+            $getdata = RoomType::where('id', $request->id)->first();
+            $data = $getdata->update([
                 'title' => $request->title,
                 'price' => $request->price,
                 'detail' => $request->detail,
             ]);
+            if($request->hasFile('imgs')){
+                foreach ($request->file('imgs') as  $img) {
+                    # code...
+                    // dd($img);
+                    $filename= date('Ymdhms').rand(1,1000).'.'.$img->getClientOriginalExtension();
+                    // dd($filename);
+                    $img->move(public_path('assets/img/roomTypeImages/'),$filename);
+                    RoomTypeImage::create([
+                        'room_type_id' =>$getdata->id,
+                        'photo'=>$filename,
+                        'photo_title' =>$getdata->title
+                    ]);
+                }
+            }
+
             if ($data) {
                 return response()->json([
                     'status' => 200,
@@ -125,6 +184,47 @@ class RoomController extends Controller
             } else {
                 return response()->json(['message' => 'something went wrong']);
             }
+        }
+    }
+
+    public function roomTypeImagesEdit(Request $request, $id){
+        // dd($request->all());
+       $validated= $request->validate([
+            'title' => 'required|string',
+            'price' =>'numeric|required',
+        ]);
+        if($validated){
+            $getData=RoomType::find($id);
+            // dd($getData);
+           $status= $getData->update([
+                'title' => $request->title,
+                'price' => $request->price,
+                'detail' => $request->detail,
+            ]);
+            if($request->hasFile('imgs')){
+                foreach ($request->file('imgs') as  $img) {
+                    # code...
+                    // dd($img);
+                    $filename= date('Ymdhms').rand(1,1000).'.'.$img->getClientOriginalExtension();
+                    // dd($filename);
+                    $img->move(public_path('assets/img/roomTypeImages/'),$filename);
+                    RoomTypeImage::create([
+                        'room_type_id' =>$getData->id,
+                        'photo'=>$filename,
+                        'photo_title' =>$getData->title
+                    ]);
+                }
+            }
+
+            $notification = array(
+                // 'T-messege' => 'welcome '.$request->name.'!',
+                'T-messege' => 'Data updated successfullly!',
+                'alert-type' => 'success'
+            );
+            return back()->with($notification);
+           
+        }else{  
+            abort(404);
         }
     }
 

@@ -36,12 +36,15 @@ Route::group(['prefix' => 'app'], function () {
     Route::group(['prefix' => 'room-management'], function () {
         // RoomTypes
         Route::resource('/room', RoomController::class);
+        Route::get('/roomType-images/{id}',[RoomController::class,'roomTypeImages'])->name('roomTypeImages');
+        Route::get('/roomType-images-delete/{id}',[RoomController::class,'roomTypeImagesDelete'])->name('roomTypeImagesDelete');
+        Route::put('/roomType-images-edit/{id}',[RoomController::class,'roomTypeImagesEdit'])->name('roomTypeImagesEdit');
         Route::post('/roomType-status', [RoomController::class, 'roomStatus'])->name('roomStatus');
 
         // Room
         Route::get('/allRooms', [RoomController::class, 'allRooms'])->name('allRooms');
         Route::post('/create-room', [RoomController::class, 'roomCreate'])->name('createRoom');
-        Route::post('/view-room/{id}', [RoomController::class, 'roomView'])->name('roomView');
+        Route::get('/view-room/{id}', [RoomController::class, 'roomView'])->name('roomView');
         Route::get('/edit-room/{id}', [RoomController::class, 'roomEdit'])->name('editRoom');
         Route::put('/update-room/{id}', [RoomController::class, 'roomUpdate'])->name('roomUpdate');
         Route::delete('/delete-room/{id}', [RoomController::class, 'destroyRoom'])->name('destroyRoom');
