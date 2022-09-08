@@ -11,7 +11,7 @@
                     <ul class="submenu_class" style="display: none;">
                         <li><a href="all-booking.html"> All Booking </a></li>
                         <li><a href="edit-booking.html"> Edit Booking </a></li>
-                        <li><a href="add-booking.html"> Add Booking </a></li>
+                        <li><a href="{{ route('bookings.create') }}"> Add Booking </a></li>
                     </ul>
                 </li>
                 <li class="submenu @if (request()->is('app/customer-management/customers')) active @else @endif"> <a href="#"><i
@@ -43,7 +43,7 @@
                     <li><a href="{{ route('staff.index') }}">All Staff </a></li>
                 </ul>
             </li>
-            <li> <a href="pricing.html"><i class="far fa-money-bill-alt"></i> <span>Pricing</span></a> </li>
+            <li> <a href="{{ route('allSalaries') }}"><i class="far fa-money-bill-alt"></i> <span>Salary</span></a> </li>
             <li class="submenu"> <a href="#"><i class="fas fa-share-alt"></i> <span> Apps </span> <span
                         class="menu-arrow"></span></a>
                 <ul class="submenu_class" style="display: none;">

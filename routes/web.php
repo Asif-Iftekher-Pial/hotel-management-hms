@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\backend\BookingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\HomeController;
 use App\Http\Controllers\backend\RoomController;
@@ -28,13 +29,8 @@ Route::group(['prefix' => 'app'], function () {
     Route::post('/admin-login/submit', [AdminController::class, 'loginSubmit'])->name('loginSubmit');
     Route::get('/admin-logout', [AdminController::class, 'adminlogout'])->name('adminlogout');
     Route::group(['middleware' => 'admin'], function () {
-        // Admin routes
-
-
         Route::get('/', [HomeController::class, 'home'])->name('home');
         Route::resource('/dashboard', HomeController::class);
-
-
         Route::group(['prefix' => 'room-management'], function () {
             // RoomTypes
             Route::resource('/room', RoomController::class);
@@ -56,11 +52,18 @@ Route::group(['prefix' => 'app'], function () {
             // Customers
             Route::resource('/customers', CustomerController::class);
         });
-        Route::group(['prefix' =>'/manage-department'],function(){
+        Route::group(['prefix' => '/manage-department'], function () {
             Route::resource('/departments', DepartmentController::class);
         });
-        Route::group(['prefix' =>'/manage-staff'],function(){
+        Route::group(['prefix' => '/manage-staff'], function () {
             Route::resource('/staff', StaffController::class);
+            Route::post('/pay-salary', [StaffController::class, 'paySalary'])->name('paySalary');
+            Route::get('/all-salaries', [StaffController::class, 'allSalaries'])->name('allSalaries');
+            Route::delete('/delete-salaries/{id}', [StaffController::class, 'Salarydestroy'])->name('Salarydestroy');
+        });
+        Route::group(['prefix' => '/manage-booking'], function () {
+            Route::resource('/bookings', BookingController::class);
+            Route::get('/check-available-room/{checkinDate}',[BookingController::class,'availableRooms'])->name('availableRooms');
         });
     });
 });

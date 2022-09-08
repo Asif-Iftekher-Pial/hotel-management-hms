@@ -246,6 +246,24 @@
                         <p id="show_bio"></p>
                        
                     </div>
+                    <div class="col-lg-12">
+                        <h3 class="text-center"><u>Make salary payment</u></h3>
+                        <div class="row">
+                            <form id="salaryPayment" method="POST">
+                                @csrf
+                                <input type="hidden" name="staff_id" id="staff_id">
+                                <div class="form-group">
+                                  <label for="exampleInputEmail1">Amount</label>
+                                  <input type="number" class="form-control" name="amount" id="amount">
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputPassword1">Date</label>
+                                  <input type="date" class="form-control" id="date" name="payment_date" placeholder="Password">
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-primary">Pay Salary</button>
+                              </form>    
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -270,7 +288,6 @@
                                     <th>Photo</th>
                                     <th>Full Name</th>
                                     <th class="text-center">Department</th>
-                                    
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -361,6 +378,56 @@
                 $('#Edit_photo').on('change', function() {
                     previewImages(this, 'div.edit-images');
                 });
+            });
+
+            // salary Payemnt
+
+            $('#salaryPayment').on('submit',function (e) { 
+                e.preventDefault();
+                // var id = $('#staff_id').val();
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('paySalary') }}",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (response) {
+                        console.log(response);
+                        if(response.status == 200){
+                            $('.modal-view').modal('hide');
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter',
+                                        Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave',
+                                        Swal
+                                        .resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message
+                            })
+                            window.setTimeout(function() {
+                                location.reload(true)
+                            }, 2100)
+                        }else{
+                            Swal.fire(
+                            'Caution!',
+                            response.msg,
+                            'error'
+                            )
+                        }
+                    }
+                });
+                
             });
 
 
@@ -465,6 +532,7 @@
                     url: url,
                     success: function (response) {
                         // console.log(response);
+                        $('#staff_id').val(response.id)
                         $('#show_name').text(response.full_name)
                         $('#show_salary_type').text(response.salary_type)
                         $('#show_salary_amn').text('BDT: '+response.salary_amt)
