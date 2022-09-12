@@ -6,6 +6,8 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
+use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
 {
@@ -46,7 +48,34 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'customer_id' => 'required',
+            'room_id' => 'required',
+            'total_adults' => 'required',
+            'total_children' => 'required',
+            'checkin' => 'required',
+            'checkout' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        } else {
+           
+            $booking = new Booking();
+            $booking->customer_id = $request->customer_id;
+            $booking->room_id     = $request->room_id;
+            $booking->total_adults    = $request->total_adults;
+            $booking->total_children   = $request->total_children;
+            $booking->checkin  = $request->checkin;
+            $booking->checkout     = $request->checkout;
+            $status              = $booking->save();
+            if ($status) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Room is booked successfully!',
+                ]);
+            }
+        }
     }
 
     /**

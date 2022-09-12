@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\RoomService;
 use App\Models\RoomTypeImage;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,6 +20,7 @@ class RoomController extends Controller
     public function index()
     {
         $allRoomTypes = RoomType::orderBy('id', 'desc')->get();
+        // $roomService = RoomService::orderBy('id', 'desc')->get();
         // dd($allRoomTypes);
         return view('backend.layouts.room.roomType', compact('allRoomTypes'));
     }
@@ -264,22 +266,43 @@ class RoomController extends Controller
     public function allRooms(){
         $allRoomTypes = RoomType::get();
         $rooms = Room::with('roomType')->orderBy('id','desc')->get();
+        $roomService = RoomService::orderBy('id', 'desc')->get();
         //  dd($rooms);
-        return view('backend.layouts.room.room',compact('rooms','allRoomTypes'));
+        return view('backend.layouts.room.room',compact('rooms','allRoomTypes','roomService'));
     }
 
     public function roomCreate(Request $request){
-        // return $request->all();
+    //   dd($request->all());
 
         $validator = Validator::make($request->all(),[
         'title' =>'string|required',
+        'price' =>'numeric|required',
+        'size'=>    'numeric|required',
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'room_service_id'=>'required',
         'status' =>'required',
         'room_type_id' =>'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['error' =>$validator->errors()->all()]);
         }else{
-           $data=Room::create($request->all());
+            if($request->file('photo')){
+                $file=$request->file('photo');
+                $filename= date('Ymdhms').'.'.$file->getClientOriginalExtension();
+                $file->move(public_path('assets/img/room/'),$filename);
+                // @unlink(public_path('assets/img/customer/'.$getData->photo));
+            }
+
+            $room= new Room();
+            $room->title = $request->title;
+            $room->price     = $request->price;
+            $room->size= $request->size;
+            $room->photo=$filename;
+            $room->room_service_id= $request->room_service_id;
+            $room->status =$request->status;
+            $room->room_type_id= $request->room_type_id;
+            $data =$room->save();
+
             if($data){
                 return response()->json([
                     'status' => 200,

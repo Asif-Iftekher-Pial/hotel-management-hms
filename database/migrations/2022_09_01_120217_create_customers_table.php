@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('mobile');
             $table->longText('address');
             $table->string('photo');
+            $table->enum('status',['active','inactive'])->default('inactive');
             $table->timestamps();
         });
     }

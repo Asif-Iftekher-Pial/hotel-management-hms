@@ -101,14 +101,14 @@
     $(document).on('click', '.mail-important', function () {
         $(this).find('i.fa').toggleClass('fa-star').toggleClass('fa-star-o');
     });
-    if ($('.summernote').length > 0) {
-        $('.summernote').summernote({
-            height: 200,
-            minHeight: null,
-            maxHeight: null,
-            focus: false
-        });
-    }
+    // if ($('.summernote').length > 0) {
+    //     $('.summernote').summernote({
+    //         height: 200,
+    //         minHeight: null,
+    //         maxHeight: null,
+    //         focus: false
+    //     });
+    // }
     if ($('.proimage-thumb li a').length > 0) {
         var full_image = $(this).attr("href");
         $(".proimage-thumb li a").click(function () {

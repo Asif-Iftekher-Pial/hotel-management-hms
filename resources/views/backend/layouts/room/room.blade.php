@@ -40,11 +40,37 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
+                                                <label>Price</label>
+                                                <input class="form-control" type="number" name="price"
+                                                    placeholder="Room price">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Size</label>
+                                                <input class="form-control" type="number" name="size"
+                                                    placeholder="Room size">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
                                                 <label>Room Type</label>
                                                 <select class="form-control" id="room_type_id" name="room_type_id">
                                                     <option value="">Select</option>
                                                     @foreach ($allRoomTypes as $item)
                                                         <option value="{{ $item->id }}">{{ $item->title }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Room Service</label>
+                                                <select class="form-control" id="room_service_id" name="room_service_id">
+                                                    <option value="">Select</option>
+                                                    @foreach ($roomService as $service)
+                                                        <option value="{{ $service->id }}">{{ $service->service_title }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -60,18 +86,17 @@
                                                 </select>
                                             </div>
                                         </div>
-
-                                        {{-- <div class="col-md-12">
+                                        <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>File Upload</label>
-                                                <div class="custom-file mb-3">
-                                                    <input type="file" class="custom-file-input" id="file-input"
-                                                        multiple name="room_image">
-                                                    <label class="custom-file-label" for="customFile">Choose file</label>
-                                                </div>
-                                                <div id="thumb-output"></div>
+                                                <input type="file" class="form-control" name="photo" id="photo"
+                                                    placeholder="Choose photo" accept="image/*">
                                             </div>
-                                        </div> --}}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mt-1">
+                                                <div class="images-preview-div"> </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -230,6 +255,25 @@
 @section('backend_script')
     <script>
         $(document).ready(function() {
+             // multiple image preview 
+             $(function() {
+                var previewImages = function(input, imgPreviewPlaceholder) {
+                    if (input.files) {
+                        var filesAmount = input.files.length;
+                        for (i = 0; i < filesAmount; i++) {
+                            var reader = new FileReader();
+                            reader.onload = function(event) {
+                                $($.parseHTML('<img style="width:70px;">')).attr('src', event.target.result).appendTo(
+                                    imgPreviewPlaceholder);
+                            }
+                            reader.readAsDataURL(input.files[i]);
+                        }
+                    }
+                };
+                $('#photo').on('change', function() {
+                    previewImages(this, 'div.images-preview-div');
+                });
+            });
 
             // create new room
 

@@ -18,6 +18,10 @@ class RoomFactory extends Factory
     {
         return [
             'title' =>$this->faker->unique()->sentence(),
+            'room_service_id'=>$this->faker->numberBetween($min = 1, $max = 5),
+            'photo' =>$this->faker->imageUrl($width= 640, $height=480),
+            'price'=>$this->faker->randomNumber(4),
+            'size'=>$this->faker->numberBetween($min = 20, $max = 30),
             'room_type_id' =>$this->faker->numberBetween($min = 1, $max = 10),
         ];
     }

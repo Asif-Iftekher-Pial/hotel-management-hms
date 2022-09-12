@@ -23,12 +23,12 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label>Customers</label>
-                            <select class="custom-select" id="inputGroupSelect03">
+                            <select class="custom-select" id="inputGroupSelect03" name="customer_id">
                                 <option value="" selected>---- Select Customer ----</option>
                                 @foreach ($allCustomers as $customer)
                                 <option value="{{ $customer->id }}">{{ $customer->full_name }}</option>
                                 @endforeach
-                              </select>
+                            </select>
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -47,7 +47,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label>Available Rooms</label>
-                            <select class="custom-select room-select" id="inputGroupSelect03">
+                            <select class="custom-select room-select" name="room_id" id="inputGroupSelect03">
                                 
                             </select>
                         </div>
@@ -103,6 +103,60 @@
                 }
             });
         });
+
+
+        // create 
+
+        $('#createForm').on('submit', function(e) {
+                e.preventDefault();
+                //  console.log('ok');
+                $('.saveButton').html('<span class="spinner-border spinner-border-sm"></span>')
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('bookings.store') }}",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(response) {
+                        // console.log(response)
+                        if (response.status == 200) {
+                            $('.create-modal').modal('hide');
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter',
+                                        Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave',
+                                        Swal
+                                        .resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message
+                            })
+                            window.setTimeout(function() {
+                                location.reload(true)
+                            }, 2100)
+                        } else {
+                            $('#save_msgList').html("");
+                            $('#save_msgList').addClass('alert alert-danger');
+                            $.each(response.error, function(key, err_value) {
+                                $('#save_msgList').append('<li>' +
+                                    err_value + '</li>');
+                            });
+
+                        }
+                    }
+                });
+            });
+
     });
 </script>
     

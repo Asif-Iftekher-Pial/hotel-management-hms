@@ -8,6 +8,9 @@ use App\Http\Controllers\backend\RoomController;
 use App\Http\Controllers\backend\CustomerController;
 use App\Http\Controllers\backend\DepartmentController;
 use App\Http\Controllers\backend\StaffController;
+use App\Http\Controllers\frontend\FrontAuthController;
+use App\Http\Controllers\frontend\FrontBookingController;
+use App\Http\Controllers\frontend\FrontHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +32,7 @@ Route::group(['prefix' => 'app'], function () {
     Route::post('/admin-login/submit', [AdminController::class, 'loginSubmit'])->name('loginSubmit');
     Route::get('/admin-logout', [AdminController::class, 'adminlogout'])->name('adminlogout');
     Route::group(['middleware' => 'admin'], function () {
-        Route::get('/', [HomeController::class, 'home'])->name('home');
+        Route::get('/admin', [HomeController::class, 'home'])->name('home');
         Route::resource('/dashboard', HomeController::class);
         Route::group(['prefix' => 'room-management'], function () {
             // RoomTypes
@@ -67,3 +70,18 @@ Route::group(['prefix' => 'app'], function () {
         });
     });
 });
+
+
+
+Route::get('/login',[FrontAuthController::class,'login'])->name('front.login');
+Route::post('/customer-registration',[FrontAuthController::class,'registration'])->name('front.registration');
+Route::post('/customer-login',[FrontAuthController::class,'customerLogin'])->name('front.customerLogin');
+Route::get('/customer-logout',[FrontAuthController::class,'customerLogout'])->name('front.customerLogout');
+
+Route::get('/',[FrontHomeController::class,'home'])->name('front.home');
+// Route::resource('/ok',FrontHomeController)
+
+// booking routes
+
+Route::resource('/customer-booking',FrontBookingController::class);
+Route::get('/room-availability',[FrontBookingController::class,'availabileRooms'])->name('frontavailableRooms');
