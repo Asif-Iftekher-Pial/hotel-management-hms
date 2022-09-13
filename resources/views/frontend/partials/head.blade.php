@@ -24,4 +24,12 @@
     <link rel="stylesheet" href="{{ asset('front/css/magnific-popup.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('front/css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('front/css/style.css') }}" type="text/css">
+    <style>
+        .customColor{
+            text-decoration: none;
+            outline: none;
+            color: tomato;
+
+        }
+    </style>
 </head>

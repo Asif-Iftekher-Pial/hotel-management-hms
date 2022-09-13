@@ -27,9 +27,11 @@
                         class="fas fa-key"></i> <span> Rooms </span> <span class="menu-arrow"></span></a>
                 <ul class="submenu_class"
                     style=" @if (request()->is('app/room-management/room')) display: block; @else display: none;" @endif>
-                        <li><a href="{{ route('room.index') }}">Room Type</a></li>
-                        <li><a href="{{ route('allRooms') }}"> Rooms </a></li>
-                </ul>
+                        <li><a href="{{ route('room.index') }}">
+                    Room Type</a>
+            </li>
+            <li><a href="{{ route('allRooms') }}"> Rooms </a></li>
+            </ul>
             </li>
             <li class="submenu"> <a href="#"><i class="fa fa-puzzle-piece"></i> <span> Departments </span> <span
                         class="menu-arrow"></span></a>
@@ -38,12 +40,19 @@
                 </ul>
             </li>
             <li class="submenu"> <a href="#"><i class="fas fa-user"></i> <span> Staff </span> <span
-                class="menu-arrow"></span></a>
+                        class="menu-arrow"></span></a>
                 <ul class="submenu_class" style="display: none;">
                     <li><a href="{{ route('staff.index') }}">All Staff </a></li>
                 </ul>
             </li>
-            <li> <a href="{{ route('allSalaries') }}"><i class="far fa-money-bill-alt"></i> <span>Salary</span></a> </li>
+            <li> <a href="{{ route('allSalaries') }}"><i class="far fa-money-bill-alt"></i> <span>Salary</span></a>
+            </li>
+            <li class="submenu"> <a href="#"><i class="fas fa-edit"></i> <span> Room Services </span> <span
+                        class="menu-arrow"></span></a>
+                <ul class="submenu_class" style="display: none;">
+                    <li><a href="{{ route('service.index') }}">All Services </a></li>
+                </ul>
+            </li>
             <li class="submenu"> <a href="#"><i class="fas fa-share-alt"></i> <span> Apps </span> <span
                         class="menu-arrow"></span></a>
                 <ul class="submenu_class" style="display: none;">

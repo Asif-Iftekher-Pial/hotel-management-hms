@@ -45,10 +45,7 @@
                     </div>
                 </div>
             </div>
-            
             @endforeach
-            
-
             <div class="col-lg-12">
                 <div class="room-pagination">
                     <a href="#">1</a>

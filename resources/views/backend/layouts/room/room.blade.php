@@ -142,11 +142,36 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
+                                                <label>Price</label>
+                                                <input class="form-control" type="number" id="price" name="price"
+                                                    placeholder="Room price">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Size</label>
+                                                <input class="form-control" type="number" id="size" name="size"
+                                                    placeholder="Room size">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
                                                 <label>Room Type</label>
                                                 <select class="form-control" id="room_type_id" name="room_type_id">
                                                     <option value="">Select</option>
                                                     @foreach ($allRoomTypes as $item)
                                                         <option value="{{ $item->id }}">{{ $item->title }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Room Service</label>
+                                                <select class="form-control" id="room_service_id" name="room_service_id">
+                                                    <option value="">Select</option>
+                                                    @foreach ($roomService as $service)
+                                                        <option value="{{ $service->id }}">{{ $service->service_title }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -162,18 +187,27 @@
                                                 </select>
                                             </div>
                                         </div>
-
-                                        {{-- <div class="col-md-12">
+                                        <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>File Upload</label>
-                                                <div class="custom-file mb-3">
-                                                    <input type="file" class="custom-file-input" id="file-input"
-                                                        multiple name="room_image">
-                                                    <label class="custom-file-label" for="customFile">Choose file</label>
-                                                </div>
-                                                <div id="thumb-output"></div>
+                                                <input type="file" class="form-control" name="photo"
+                                                    id="Edit_photo" placeholder="Choose photo">
                                             </div>
-                                        </div> --}}
+                                            {{-- @error('photo')
+                                                <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                            @enderror --}}
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="mt-1">
+                                                <div class="edit-images"> </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mt-1">
+                                                <label>Previous photo</label>
+                                                <div id="previous-images"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +261,7 @@
                                                 data-offstyle="danger">
                                         </td>
                                         <td class="d-flex">
-                                            <a href="{{ route('roomView',$item->id) }}" class="btn btn-primary btn-sm mr-2"><span class="fas fa-eye"></span></a>
+                                            <a href="{{ route('room.show', $item->id) }}" class="btn btn-primary btn-sm mr-2"><span class="fas fa-eye"></span></a>
 
                                             <button class="btn btn-sm btn-warning mr-2 editButton"
                                                 value="{{ $item->id }}"data-toggle="modal"
@@ -272,6 +306,27 @@
                 };
                 $('#photo').on('change', function() {
                     previewImages(this, 'div.images-preview-div');
+                });
+            });
+
+            // multiple image preview 
+
+            $(function() {
+                var previewImages = function(input, imgPreviewPlaceholder) {
+                    if (input.files) {
+                        var filesAmount = input.files.length;
+                        for (i = 0; i < filesAmount; i++) {
+                            var reader = new FileReader();
+                            reader.onload = function(event) {
+                                $($.parseHTML('<img style="width:70px;">')).attr('src', event.target.result).appendTo(
+                                    imgPreviewPlaceholder);
+                            }
+                            reader.readAsDataURL(input.files[i]);
+                        }
+                    }
+                };
+                $('#Edit_photo').on('change', function() {
+                    previewImages(this, 'div.edit-images');
                 });
             });
 
@@ -369,17 +424,24 @@
                 $('.editButton').click(function(e) {
                     e.preventDefault();
                     var id = $(this).val();
+                    var asset_path = '{{ asset('assets/img/room/') }}'
                     var url = "{{ route('editRoom', ":id") }}"; //resource route  parameter passed
                     url = url.replace(':id', id); //resource route  parameter passed
                     $.ajax({
                         type: "get",
                         url: url ,//passing id with route name
                         success: function(response) {
-                             console.log(response.room_type.title);
+                            //  console.log(response.room_type.title);
                             $('#title').val(response.title);
+                            $('#price').val(response.price);
+                            $('#size').val(response.size);
+                            $('#price').val(response.price);
                             $('#room_type_id').val(response.room_type.title);
+                            $('#room_service_id').val(response.service.service_title);
                             $('#status').val(response.status);
                             $('#id').val(response.id);
+                            $('#previous-images').html(
+                                '<img style="width:100px;" src="'+asset_path+'/'+response.photo+'">');
                         }
                     });
                 });

@@ -7,10 +7,12 @@ use App\Http\Controllers\backend\HomeController;
 use App\Http\Controllers\backend\RoomController;
 use App\Http\Controllers\backend\CustomerController;
 use App\Http\Controllers\backend\DepartmentController;
+use App\Http\Controllers\backend\RoomServiceController;
 use App\Http\Controllers\backend\StaffController;
 use App\Http\Controllers\frontend\FrontAuthController;
 use App\Http\Controllers\frontend\FrontBookingController;
 use App\Http\Controllers\frontend\FrontHomeController;
+use App\Http\Controllers\frontend\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,25 +47,32 @@ Route::group(['prefix' => 'app'], function () {
             // Room
             Route::get('/allRooms', [RoomController::class, 'allRooms'])->name('allRooms');
             Route::post('/create-room', [RoomController::class, 'roomCreate'])->name('createRoom');
-            Route::get('/view-room/{id}', [RoomController::class, 'roomView'])->name('roomView');
             Route::get('/edit-room/{id}', [RoomController::class, 'roomEdit'])->name('editRoom');
             Route::put('/update-room/{id}', [RoomController::class, 'roomUpdate'])->name('roomUpdate');
             Route::delete('/delete-room/{id}', [RoomController::class, 'destroyRoom'])->name('destroyRoom');
         });
 
+        // Room Service
+        Route::group(['prefix' =>'service-management'],function(){
+            Route::resource('/service',RoomServiceController::class);
+        });
+
+        // Customers
         Route::group(['prefix' => 'customer-management'], function () {
-            // Customers
             Route::resource('/customers', CustomerController::class);
         });
+        // Department
         Route::group(['prefix' => '/manage-department'], function () {
             Route::resource('/departments', DepartmentController::class);
         });
+        // Staff-Management
         Route::group(['prefix' => '/manage-staff'], function () {
             Route::resource('/staff', StaffController::class);
             Route::post('/pay-salary', [StaffController::class, 'paySalary'])->name('paySalary');
             Route::get('/all-salaries', [StaffController::class, 'allSalaries'])->name('allSalaries');
             Route::delete('/delete-salaries/{id}', [StaffController::class, 'Salarydestroy'])->name('Salarydestroy');
         });
+        // Manage Booking
         Route::group(['prefix' => '/manage-booking'], function () {
             Route::resource('/bookings', BookingController::class);
             Route::get('/check-available-room/{checkinDate}',[BookingController::class,'availableRooms'])->name('availableRooms');
@@ -79,9 +88,16 @@ Route::post('/customer-login',[FrontAuthController::class,'customerLogin'])->nam
 Route::get('/customer-logout',[FrontAuthController::class,'customerLogout'])->name('front.customerLogout');
 
 Route::get('/',[FrontHomeController::class,'home'])->name('front.home');
+
 // Route::resource('/ok',FrontHomeController)
 
-// booking routes
+// booking routes with rooms functionality
 
 Route::resource('/customer-booking',FrontBookingController::class);
 Route::get('/room-availability',[FrontBookingController::class,'availabileRooms'])->name('frontavailableRooms');
+Route::get('/all-room',[FrontBookingController::class,'allRooms'])->name('front.allRooms');
+Route::get('/room-detail/{id}',[FrontBookingController::class,'room_detail'])->name('front.room_detail');
+Route::post('/check-room-availability',[FrontBookingController::class,'checkAvailability'])->name('checkAvailability');
+
+// review
+Route::resource('/customer-review',ReviewController::class);

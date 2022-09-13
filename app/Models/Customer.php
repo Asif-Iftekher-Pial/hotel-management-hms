@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class Customer extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    protected $guard='customers';
     protected $fillable=[
         'full_name','email','password','mobile','address','photo','status'
     ];
@@ -19,4 +20,6 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(Booking::class,'customer_id','id');
     }
+
+    
 }

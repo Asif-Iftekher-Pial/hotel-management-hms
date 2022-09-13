@@ -24,8 +24,6 @@ class RoomController extends Controller
         // dd($allRoomTypes);
         return view('backend.layouts.room.roomType', compact('allRoomTypes'));
     }
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -47,7 +45,7 @@ class RoomController extends Controller
         // dd($request->all());
         $request->validate([
             'title' => 'string|required',
-            'price' =>'numeric|required',
+            'price' => 'numeric|required',
             'detail' => 'string|required',
             // 'imgs' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
@@ -58,18 +56,18 @@ class RoomController extends Controller
             'price' => $request->price,
             'detail' => $request->detail,
         ]);
-        if($request->has('imgs')){
+        if ($request->has('imgs')) {
             // dd('ok');
             foreach ($request->file('imgs') as  $img) {
                 # code...
                 // dd($img);
-                $filename= date('Ymdhms').rand(1,1000).'.'.$img->getClientOriginalExtension();
+                $filename = date('Ymdhms') . rand(1, 1000) . '.' . $img->getClientOriginalExtension();
                 // dd($filename);
-                $img->move(public_path('assets/img/roomTypeImages/'),$filename);
+                $img->move(public_path('assets/img/roomTypeImages/'), $filename);
                 RoomTypeImage::create([
-                    'room_type_id' =>$status->id,
-                    'photo'=>$filename,
-                    'photo_title' =>$status->title
+                    'room_type_id' => $status->id,
+                    'photo' => $filename,
+                    'photo_title' => $status->title
                 ]);
             }
         }
@@ -91,22 +89,24 @@ class RoomController extends Controller
             return back()->with($notification);
         }
     }
-    public function roomTypeImagesDelete($id){
-        $deleteImage=RoomTypeImage::where('id',$id)->first();
-        if($deleteImage) {
-        @unlink(public_path('assets/img/roomTypeImages/'.$deleteImage->photo));
+    public function roomTypeImagesDelete($id)
+    {
+        $deleteImage = RoomTypeImage::where('id', $id)->first();
+        if ($deleteImage) {
+            @unlink(public_path('assets/img/roomTypeImages/' . $deleteImage->photo));
             $deleteImage->delete();
-            return response()->json(['status'=>200,'message' =>'deleted successfully!']);
-        }else{
+            return response()->json(['status' => 200, 'message' => 'deleted successfully!']);
+        } else {
             abort(404);
         }
     }
-    public function roomTypeImages($id){
-        $galleries= RoomType::where('id',$id)->with('room_type_image')->first();
+    public function roomTypeImages($id)
+    {
+        $galleries = RoomType::where('id', $id)->with('room_type_image')->first();
         //  dd($galleries);
-        if($galleries){
-            return view('backend.layouts.room.gallery',compact('galleries'));
-        }else{
+        if ($galleries) {
+            return view('backend.layouts.room.gallery', compact('galleries'));
+        } else {
             abort(404);
         }
     }
@@ -119,7 +119,9 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        //
+        $getData = Room::with('service', 'roomType')->findOrFail($id);
+        // dd($getData);
+        return view('backend.layouts.room.viewRoom', compact('getData'));
     }
 
     /**
@@ -150,30 +152,30 @@ class RoomController extends Controller
         //   dd($request->all());
         $validate = Validator::make($request->all(), [
             'title' => 'required|string',
-            'price' =>'numeric|required',
+            'price' => 'numeric|required',
             'detail' => 'required',
         ]);
         if ($validate->fails()) {
             return response()->json(['error' => $validate->errors()->all()]);
         } else {
-            
+
             $getdata = RoomType::where('id', $request->id)->first();
             $data = $getdata->update([
                 'title' => $request->title,
                 'price' => $request->price,
                 'detail' => $request->detail,
             ]);
-            if($request->hasFile('imgs')){
+            if ($request->hasFile('imgs')) {
                 foreach ($request->file('imgs') as  $img) {
                     # code...
                     // dd($img);
-                    $filename= date('Ymdhms').rand(1,1000).'.'.$img->getClientOriginalExtension();
+                    $filename = date('Ymdhms') . rand(1, 1000) . '.' . $img->getClientOriginalExtension();
                     // dd($filename);
-                    $img->move(public_path('assets/img/roomTypeImages/'),$filename);
+                    $img->move(public_path('assets/img/roomTypeImages/'), $filename);
                     RoomTypeImage::create([
-                        'room_type_id' =>$getdata->id,
-                        'photo'=>$filename,
-                        'photo_title' =>$getdata->title
+                        'room_type_id' => $getdata->id,
+                        'photo' => $filename,
+                        'photo_title' => $getdata->title
                     ]);
                 }
             }
@@ -189,31 +191,32 @@ class RoomController extends Controller
         }
     }
 
-    public function roomTypeImagesEdit(Request $request, $id){
+    public function roomTypeImagesEdit(Request $request, $id)
+    {
         // dd($request->all());
-       $validated= $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string',
-            'price' =>'numeric|required',
+            'price' => 'numeric|required',
         ]);
-        if($validated){
-            $getData=RoomType::find($id);
+        if ($validated) {
+            $getData = RoomType::find($id);
             // dd($getData);
-           $status= $getData->update([
+            $status = $getData->update([
                 'title' => $request->title,
                 'price' => $request->price,
                 'detail' => $request->detail,
             ]);
-            if($request->hasFile('imgs')){
+            if ($request->hasFile('imgs')) {
                 foreach ($request->file('imgs') as  $img) {
                     # code...
                     // dd($img);
-                    $filename= date('Ymdhms').rand(1,1000).'.'.$img->getClientOriginalExtension();
+                    $filename = date('Ymdhms') . rand(1, 1000) . '.' . $img->getClientOriginalExtension();
                     // dd($filename);
-                    $img->move(public_path('assets/img/roomTypeImages/'),$filename);
+                    $img->move(public_path('assets/img/roomTypeImages/'), $filename);
                     RoomTypeImage::create([
-                        'room_type_id' =>$getData->id,
-                        'photo'=>$filename,
-                        'photo_title' =>$getData->title
+                        'room_type_id' => $getData->id,
+                        'photo' => $filename,
+                        'photo_title' => $getData->title
                     ]);
                 }
             }
@@ -224,8 +227,7 @@ class RoomController extends Controller
                 'alert-type' => 'success'
             );
             return back()->with($notification);
-           
-        }else{  
+        } else {
             abort(404);
         }
     }
@@ -245,9 +247,6 @@ class RoomController extends Controller
         }
     }
 
-
-
-
     public function roomStatus(Request $request)
     {
         // dd($request->all());
@@ -263,47 +262,49 @@ class RoomController extends Controller
     }
 
 
-    public function allRooms(){
+    public function allRooms()
+    {
         $allRoomTypes = RoomType::get();
-        $rooms = Room::with('roomType')->orderBy('id','desc')->get();
+        $rooms = Room::with('roomType')->orderBy('id', 'desc')->get();
         $roomService = RoomService::orderBy('id', 'desc')->get();
         //  dd($rooms);
-        return view('backend.layouts.room.room',compact('rooms','allRoomTypes','roomService'));
+        return view('backend.layouts.room.room', compact('rooms', 'allRoomTypes', 'roomService'));
     }
 
-    public function roomCreate(Request $request){
-    //   dd($request->all());
+    public function roomCreate(Request $request)
+    {
+        //   dd($request->all());
 
-        $validator = Validator::make($request->all(),[
-        'title' =>'string|required',
-        'price' =>'numeric|required',
-        'size'=>    'numeric|required',
-        'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'room_service_id'=>'required',
-        'status' =>'required',
-        'room_type_id' =>'required'
+        $validator = Validator::make($request->all(), [
+            'title' => 'string|required',
+            'price' => 'numeric|required',
+            'size' =>    'numeric|required',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'room_service_id' => 'required',
+            'status' => 'required',
+            'room_type_id' => 'required'
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' =>$validator->errors()->all()]);
-        }else{
-            if($request->file('photo')){
-                $file=$request->file('photo');
-                $filename= date('Ymdhms').'.'.$file->getClientOriginalExtension();
-                $file->move(public_path('assets/img/room/'),$filename);
+            return response()->json(['error' => $validator->errors()->all()]);
+        } else {
+            if ($request->file('photo')) {
+                $file = $request->file('photo');
+                $filename = date('Ymdhms') . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('assets/img/room/'), $filename);
                 // @unlink(public_path('assets/img/customer/'.$getData->photo));
             }
 
-            $room= new Room();
+            $room = new Room();
             $room->title = $request->title;
             $room->price     = $request->price;
-            $room->size= $request->size;
-            $room->photo=$filename;
-            $room->room_service_id= $request->room_service_id;
-            $room->status =$request->status;
-            $room->room_type_id= $request->room_type_id;
-            $data =$room->save();
+            $room->size = $request->size;
+            $room->photo = $filename;
+            $room->room_service_id = $request->room_service_id;
+            $room->status = $request->status;
+            $room->room_type_id = $request->room_type_id;
+            $data = $room->save();
 
-            if($data){
+            if ($data) {
                 return response()->json([
                     'status' => 200,
                     'message' => 'Room created successfully!'
@@ -312,31 +313,51 @@ class RoomController extends Controller
         }
     }
 
-    public function roomEdit($id){
-        $findRoom = Room::with('roomType')->findOrFail($id);
+    public function roomEdit($id)
+    {
+        $findRoom = Room::with('roomType', 'service')->findOrFail($id);
         //   dd($findRoom);
-        if($findRoom){
+        if ($findRoom) {
             return response()->json($findRoom);
         }
     }
 
-    public function roomUpdate(Request $request){
-        // return $request->all();
-        $validator = Validator::make($request->all(),[
-            'title' =>'string|required',
-            'room_type_id'  =>'required',
-            'status' =>'required'
+    public function roomUpdate(Request $request)
+    {
+        //  return $request->all();
+        $validator = Validator::make($request->all(), [
+            'title' => 'string|required',
+            'price' => 'numeric|required',
+            'size' =>    'numeric|required',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'room_service_id' => 'required',
+            'status' => 'required',
+            'room_type_id' => 'required'
         ]);
-        if($validator->fails()) {
-            return response()->json(['error' =>$validator->errors()->all()]);   
-        }else{
-            $data=$request->all();
-            $ok=Room::where('id', $request->id)->first();
-           $status= $ok->fill($data)->save();
-            if($status){
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        } else {
+
+            $ok = Room::where('id', $request->id)->first();
+            if ($request->file('photo')) {
+                $file = $request->file('photo');
+                $filename = date('Ymdhms') . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('assets/img/room/'), $filename);
+                @unlink(public_path('assets/img/room/' . $ok->photo));
+            }
+            $status = $ok->update([
+                'title' => $request->title,
+                'price' => $request->price,
+                'size' => $request->size,
+                'photo' => $filename,
+                'room_service_id' => $request->room_service_id,
+                'status' => $request->status,
+                'room_type_id' => $request->room_type_id,
+            ]);
+            if ($status) {
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'data updated successfully!'
+                    'status' => 200,
+                    'message' => 'data updated successfully!'
                 ]);
             }
         }
@@ -346,9 +367,9 @@ class RoomController extends Controller
     {
         $getData = Room::findOrFail($id);
         if ($getData) {
+            @unlink(public_path('assets/img/room/' . $getData->photo));
             $getData->delete();
             return back();
         }
     }
-
 }

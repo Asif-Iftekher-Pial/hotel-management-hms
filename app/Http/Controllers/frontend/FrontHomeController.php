@@ -4,6 +4,7 @@ namespace App\Http\Controllers\frontend;
 
 use App\Models\Room;
 use App\Models\RoomType;
+use App\Models\RoomService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,6 +14,7 @@ class FrontHomeController extends Controller
     {
         $roomType = RoomType::with('room_type_image', 'rooms')->orderBy('id', 'desc')->get()->random(3);
         //   dd($roomType);
+       
         foreach ($roomType as $value) {
             # code...
             foreach ($value->room_type_image as $key) {
@@ -22,7 +24,11 @@ class FrontHomeController extends Controller
             }
         }
         $test = $t;
-        return view('frontend.layouts.home.home', compact('roomType', 'test'));
+        $getService = RoomService::orderBy('id', 'desc')->get()->random(6);
+
+        $getRooms = Room::orderBy('id', 'desc')->with('roomType','service')->get()->random(4);
+        //   dd($getRooms);
+        return view('frontend.layouts.home.home', compact('roomType', 'test','getService','getRooms'));
     }
     /**
      * Display a listing of the resource.
@@ -99,4 +105,5 @@ class FrontHomeController extends Controller
     {
         //
     }
+    
 }

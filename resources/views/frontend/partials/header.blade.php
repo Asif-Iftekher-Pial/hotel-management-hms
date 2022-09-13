@@ -101,7 +101,7 @@
             <div class="row">
                 <div class="col-lg-2">
                     <div class="logo">
-                        <a href="./index.html">
+                        <a href="{{ route('front.home') }}">
                             <img src="{{ asset('front/img/logo.png') }}" alt="">
                         </a>
                     </div>
@@ -110,8 +110,8 @@
                     <div class="nav-menu">
                         <nav class="mainmenu">
                             <ul>
-                                <li class="active"><a href="./index.html">Home</a></li>
-                                <li><a href="./rooms.html">Rooms</a></li>
+                                <li class="@if(request()->is('/')) active @endif"><a href="{{ route('front.home') }}">Home</a></li>
+                                <li class="@if(request()->is('all-room')) active @endif"><a href="{{ route('front.allRooms') }}">Rooms</a></li>
                                 <li><a href="./about-us.html">About Us</a></li>
                                 <li><a href="./pages.html">Pages</a>
                                     <ul class="dropdown">

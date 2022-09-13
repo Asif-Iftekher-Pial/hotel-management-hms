@@ -20,4 +20,6 @@ class Room extends Model
     {
         return $this->hasOne(RoomService::class,'id','room_service_id');
     }
+
+    
 }

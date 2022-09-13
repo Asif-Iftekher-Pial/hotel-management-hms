@@ -5,7 +5,7 @@
             <div class="col-sm-12 mt-5">
                 <h3 class="page-title mt-3">Good Morning Soeng Souy!</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item active">All Departments</li>
+                    <li class="breadcrumb-item active">All Room Services</li>
                 </ul>
             </div>
         </div>
@@ -16,7 +16,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Department </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Service </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -33,15 +33,15 @@
                                     <div class="row formtype">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Department Title</label>
-                                                <input class="form-control" type="text" name="title"
-                                                    placeholder="Department name">
+                                                <label>Service Title</label>
+                                                <input class="form-control" type="text" name="service_title"
+                                                    placeholder="service_title">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Detail</label>
-                                                <textarea name="detail" id="summernote" cols="30" rows="10"></textarea>
+                                                <textarea name="service_detail" id="summernote" cols="30" rows="10"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -63,7 +63,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Department </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Service </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -82,15 +82,15 @@
                                     <div class="row formtype">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Department Name</label>
-                                                <input class="form-control" type="text" id="title" name="title"
-                                                    placeholder="Department name">
+                                                <label>Service Name</label>
+                                                <input class="form-control" type="text" id="service_title" name="service_title"
+                                                    placeholder="service_title">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Detail</label>
-                                                <textarea class="form-control detail" name="detail" id="summernote" cols="30" rows="10"></textarea>
+                                                <label>Service Detail</label>
+                                                <textarea class="form-control service_detail" name="service_detail" id="summernote" cols="30" rows="10"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -111,10 +111,10 @@
         <div class="col-md-12 d-flex">
             <div class="card card-table flex-fill">
                 <div class="card-header">
-                    <h4 class="card-title float-left mt-2">All Departments</h4>
+                    <h4 class="card-title float-left mt-2">All Services</h4>
                     <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                         data-target=".create-modal">
-                        <span class="fas fa-plus"></span> Add Department
+                        <span class="fas fa-plus"></span> Add Service
                     </button>
                 </div>
                 <div class="card-body p-2">
@@ -123,8 +123,8 @@
                             <thead>
                                 <tr>
                                     <th>#Sl</th>
-                                    <th>Name</th>
-                                    <th class="text-center">Detail</th>
+                                    <th>Service Name</th>
+                                    <th class="text-center">Service Detail</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -133,24 +133,16 @@
                                     <tr>
                                         <th class="text-nowrap">{{ $key + 1 }}</th>
                                         <td class="text-nowrap">
-                                            <div>{{ substr_replace($item->title, '...', 20) }}</div>
+                                            <div>{{ substr_replace($item->service_title, '...', 20) }}</div>
                                         </td>
                                         <td class="text-nowrap">
-                                            <div>{!! html_entity_decode(substr_replace($item->detail, '...', 20)) !!}</div>
+                                            <div>{!! html_entity_decode(substr_replace($item->service_detail, '...', 20)) !!}</div>
                                         </td>
-                                        <td class="d-flex">
+                                        <td class="text-center">
                                             <button class="btn btn-sm btn-warning mr-2 editButton"
                                                 value="{{ $item->id }}"data-toggle="modal"
                                                 data-target=".modal-edit"><span class="fas fa-pen"></span>
                                             </button>
-                                            <form action="{{ route('departments.destroy', $item->id) }}" method="post">
-                                                @method('delete')
-                                                @csrf
-                                                <button class="btn btn-sm btn-danger deleteButton"
-                                                    value="{{ $item->id }}">
-                                                    <span class="fas fa-trash"></span>
-                                                </button>
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -177,7 +169,7 @@
                 $('.saveButton').html('<span class="spinner-border spinner-border-sm"></span>')
                 $.ajax({
                     type: "post",
-                    url: "{{ route('departments.store') }}",
+                    url: "{{ route('service.store') }}",
                     data: new FormData(this),
                     contentType: false,
                     cache: false,
@@ -229,7 +221,7 @@
                     e.preventDefault();
                     var id = $(this).val();
                     var url =
-                    "{{ route('departments.edit', ':id') }}"; //resource route  parameter passed
+                    "{{ route('service.edit', ':id') }}"; //resource route  parameter passed
                     url = url.replace(':id', id); //resource route  parameter passed
                     $.ajax({
                         type: "get",
@@ -237,8 +229,8 @@
                         success: function(response) {
                             // console.log(response.mobile);
                             $('#id').val(response.id);
-                            $('#title').val(response.title);
-                            $('.detail').val(response.detail);
+                            $('#service_title').val(response.service_title);
+                            $('.service_detail').val(response.service_detail);
                         }
                     });
                 });
@@ -250,7 +242,7 @@
                     // console.log(id);
                     $('.updateButton').html(
                         '<span class="spinner-border spinner-border-sm"></span>')
-                    var url = "{{ route('departments.update', ':id') }}"
+                    var url = "{{ route('service.update', ':id') }}"
                     url = url.replace(':id', id);
                     $.ajax({
                         type: "post",
