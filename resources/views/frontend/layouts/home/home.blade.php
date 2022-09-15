@@ -1,9 +1,9 @@
 @extends('frontend.master.master')
 
 @section('front_main')
-<!-- Hero Section Begin -->
-@include('frontend.partials.carousel')
-<!-- Hero Section End -->
+    <!-- Hero Section Begin -->
+    @include('frontend.partials.carousel')
+    <!-- Hero Section End -->
 
     <!-- About Us Section Begin -->
     <section class="aboutus-section spad">
@@ -39,8 +39,8 @@
         </div>
     </section>
     <!-- About Us Section End -->
-     <!-- Blog Section Begin -->
-     <section class="blog-section spad">
+    <!-- Blog Section Begin -->
+    <section class="blog-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -51,22 +51,21 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ($roomType as $data )
-                
-                <div class="col-lg-4">
+                @foreach ($roomType as $data)
+                    <div class="col-lg-4">
 
-                    <div class="blog-item set-bg" data-setbg="{{ asset('assets/img/roomTypeImages/'.$test) }}">
-                        {{-- <div>
+                        <div class="blog-item set-bg" data-setbg="{{ asset('assets/img/roomTypeImages/' . $test) }}">
+                            {{-- <div>
                         <img style="max-width: 50%" src="{{ asset('front/img/blog/blog-2.jpg') }}" alt="">
 
                         </div> --}}
-                        <div class="bi-text">
-                            <span class="b-tag">$ {{ $data->price }}</span>
-                            <h4><a href="{{ $data->id }}">{{ $data->title }}</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> {!! html_entity_decode(substr_replace($data->detail, '...', 20))  !!}</div>
+                            <div class="bi-text">
+                                <span class="b-tag">$ {{ $data->price }}</span>
+                                <h4><a href="{{ $data->id }}">{{ $data->title }}</a></h4>
+                                <div class="b-time"><i class="icon_clock_alt"></i> {!! html_entity_decode(substr_replace($data->detail, '...', 20)) !!}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             </div>
         </div>
@@ -90,16 +89,16 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ( $getService as $value )
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        
-                        <i class="flaticon-024-towel"></i>
-                        <i class="flaticon-012-cocktail"></i>
-                        <h4>{{ $value->service_title }}</h4>
-                        <p>{!! html_entity_decode(substr_replace($value->service_detail,'...',20)) !!}</p>
+                @foreach ($getService as $value)
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="service-item">
+
+                            <i class="flaticon-024-towel"></i>
+                            <i class="flaticon-012-cocktail"></i>
+                            <h4>{{ $value->service_title }}</h4>
+                            <p>{!! html_entity_decode(substr_replace($value->service_detail, '...', 20)) !!}</p>
+                        </div>
                     </div>
-                </div>
                 @endforeach
             </div>
         </div>
@@ -111,28 +110,29 @@
         <div class="container-fluid">
             <div class="hp-room-items">
                 <div class="row">
-                    @foreach ( $getRooms as $room )
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ asset('assets/img/room/'.$room->photo) }}">
-                            <div class="hr-text">
-                                <h3>{!! html_entity_decode(substr_replace($room->title,'...',15)) !!}</h3>
-                                <h2>{{ $room->price }}$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>{{ $room->size }} ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>{!! html_entity_decode(substr_replace($room->service->service_detail,'...',15)) !!}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href=" {{ route('front.room_detail', $room->id) }} " class="primary-btn">More Details</a>
+                    @foreach ($getRooms as $room)
+                        <div class="col-lg-3 col-md-6">
+                            <div class="hp-room-item set-bg" data-setbg="{{ asset('assets/img/room/' . $room->photo) }}">
+                                <div class="hr-text">
+                                    <h3>{!! html_entity_decode(substr_replace($room->title, '...', 15)) !!}</h3>
+                                    <h2>{{ $room->price }}$<span>/Pernight</span></h2>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="r-o">Size:</td>
+                                                <td>{{ $room->size }} ft</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Services:</td>
+                                                <td>{!! html_entity_decode(substr_replace($room->service->service_detail, '...', 15)) !!}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a href=" {{ route('front.room_detail', $room->id) }} " class="primary-btn">More
+                                        Details</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>
@@ -154,40 +154,22 @@
             <div class="row">
                 <div class="col-lg-8 offset-lg-2">
                     <div class="testimonial-slider owl-carousel">
-                        <div class="ts-item">
-                            <p>After a construction project took longer than expected, my husband, my daughter and I
-                                needed a place to stay for a few nights. As a Chicago resident, we know a lot about our
-                                city, neighborhood and the types of housing options available and absolutely love our
-                                vacation at Sona Hotel.</p>
-                            <div class="ti-author">
-                                <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
+                        @foreach ($testimonials as $testimonial)
+                            <div class="ts-item">
+                                <p>{{ $testimonial->customer_review }}</p>
+                                <div class="ti-author">
+                                    <div class="rating">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            @if ($testimonial->star > $i)
+                                                <i class="icon_star"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <h5> - {{ $testimonial->customer->full_name }}</h5>
                                 </div>
-                                <h5> - Alexander Vasquez</h5>
+                                <img src="{{ asset('front/img/testimonial-logo.png') }}" alt="">
                             </div>
-                            <img src="{{ asset('front/img/testimonial-logo.png') }}" alt="">
-                        </div>
-                        <div class="ts-item">
-                            <p>After a construction project took longer than expected, my husband, my daughter and I
-                                needed a place to stay for a few nights. As a Chicago resident, we know a lot about our
-                                city, neighborhood and the types of housing options available and absolutely love our
-                                vacation at Sona Hotel.</p>
-                            <div class="ti-author">
-                                <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
-                                </div>
-                                <h5> - Alexander Vasquez</h5>
-                            </div>
-                            <img src="{{ asset('front/img/testimonial-logo.png') }}" alt="">
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -235,8 +217,7 @@
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    <div class="blog-item small-size set-bg"
-                        data-setbg="{{ asset('front/img/blog/blog-wide.jpg') }}">
+                    <div class="blog-item small-size set-bg" data-setbg="{{ asset('front/img/blog/blog-wide.jpg') }}">
                         <div class="bi-text">
                             <span class="b-tag">Event</span>
                             <h4><a href="#">Trip To Iqaluit In Nunavut A Canadian Arctic City</a></h4>
@@ -257,5 +238,4 @@
         </div>
     </section>
     <!-- Blog Section End -->
-    
 @endsection

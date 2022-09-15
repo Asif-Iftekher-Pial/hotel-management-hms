@@ -8,6 +8,7 @@ use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class FrontBookingController extends Controller
 {
@@ -44,9 +45,9 @@ class FrontBookingController extends Controller
     public function room_detail($id)
     {
         $getRoom = Room::where(['id' => $id], ['status' => 'active'])->with('service', 'roomType')->first();
-        $reviews =Review::where('room_id',$id)->with('customer')->latest()->limit(3)->get();
+        $reviews = Review::where('room_id', $id)->with('customer')->latest()->limit(3)->get();
         // dd($reviews);
-        return view('frontend.layouts.room.room_detail', compact('getRoom','reviews'));
+        return view('frontend.layouts.room.room_detail', compact('getRoom', 'reviews'));
     }
 
     public function checkAvailability(Request $request)
@@ -116,7 +117,70 @@ class FrontBookingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'room_id' => 'required',
+            'customer_id' => 'required',
+            'checkout' => 'required',
+            'checkin' => 'required',
+            'total_adults' => 'required',
+            'total_children' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        } else {
+            $string = $request->room_id;
+            $room_id = intval($string);
+            $checkin = $request->checkin;
+            $checkout = $request->checkout;
+            if ($checkin < $checkout) {
+                // dd($request->id);
+                $booked_room = Booking::where([['room_id', $room_id], ['customer_id', $request->customer_id]])->exists();
+                if ($booked_room) {
+                    // dd('you have already booked this room');
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'you have already booked this room'
+                    ]);
+                } else {
+                    // dd('not found this room with this user ,so check their check in date');
+                    $this_room = Booking::where('room_id', $room_id)->first();
+                    if ($this_room->checkout > $checkin) {
+                        // dd('this room is reserved in your checkin date ,please select farther date');
+                        return response()->json([
+                            'status' => 400,
+                            'message' => 'Already Reserved! Please select farther date'
+                        ]);
+                    } else {
+                        // dd('this room is free and available for bookings with valid check in date');
+
+                        $booking = new Booking();
+                        $booking->room_id = $room_id;
+                        $booking->checkin = $checkin;
+                        $booking->checkout = $checkout;
+                        $booking->total_children = $request->total_children;
+                        $booking->total_adults = $request->total_adults;
+                        $status = $booking->save();
+                        $headerRender = view('frontend.layouts.includes.headerAjaxrender')->render();
+                        if ($status) {
+                            return response()->json([
+                                'status' => 200,
+                                'message' => 'Room booked successfully!',
+                                'headerRender' => $headerRender
+                            ]);
+                        } else {
+                            abort(404);
+                        }
+                    }
+                }
+            } else {
+                // checkin must be smaller then checkout
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Checkin must be smaller then Checkout'
+                ]);
+            }
+        }
     }
 
     /**

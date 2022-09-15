@@ -319,7 +319,8 @@ ul, ol {
 	display: inline-block;
 	font-size: 15px;
 	font-weight: 700;
-	padding: 19px 69px 0px;
+	padding-top:15px;
+	/* padding: 19px 69px 0px; */
 	background: #dfa974;
 	color: #ffffff;
 	text-transform: uppercase;
@@ -327,9 +328,10 @@ ul, ol {
 }
 .top-nav .tn-right .language-option {
 	display: inline-block;
-	margin-left: 30px;
+	margin-left: 100px;
 	cursor: pointer;
-	padding: 13px 0px 11px;
+	/* padding: 13px 0px 11px; */
+	padding: 5px 0px 2px;
 	position: relative;
 }
 .top-nav .tn-right .language-option:hover .flag-dropdown {

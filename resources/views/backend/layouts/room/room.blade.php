@@ -494,8 +494,8 @@
                                 $('#update_validation_error').html("");
                                 $('#update_validation_error').addClass('alert alert-danger');
                                 $.each(response.error, function(key, err_value) {
-                                    $('#update_validation_error').append('<li>' +
-                                        err_value + '</li>');
+                                    $('#update_validation_error').append(
+                                        '<li>' +err_value + '</li>');
                                 });
                                 $('.updateButton').text('Update')
                             }

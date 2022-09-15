@@ -394,92 +394,92 @@
             });
 
             // edit
-            $(document).ready(function() {
-                $('.editButton').click(function(e) {
-                    e.preventDefault();
-                    var id = $(this).val();
-                    var asset_path= "{{ asset('assets/img/customer/') }}"
-                    var url =
-                    "{{ route('customers.edit', ':id') }}"; //resource route  parameter passed
-                    url = url.replace(':id', id); //resource route  parameter passed
-                    $.ajax({
-                        type: "get",
-                        url: url, //passing id with route name
-                        success: function(response) {
-                            // console.log(response.mobile);
-                            $('#id').val(response.id);
-                            $('#full_name').val(response.full_name);
-                            $('#customerAddress').val(response.address);
-                            $('#mobileNumber').val(response.mobile);
-                            $('#emailID').val(response.email);
-                            $('#customerPassword').val(response.password);
-                            $('#previous-images').html(
-                                ' <img style="width:100px;height:100px" src="'+asset_path+'/'+
-                                response.photo + '" >');
-                        }
-                    });
-                });
-
-                // update
-                $('#updateForm').on('submit', function(e) {
-                    e.preventDefault();
-                    var id = $('#id').val();
-                    // console.log(id);
-                    $('.updateButton').html(
-                        '<span class="spinner-border spinner-border-sm"></span>')
-                    var url = "{{ route('customers.update', ':id') }}"
-                    url = url.replace(':id', id);
-                    $.ajax({
-                        type: "post",
-                        url: url,
-                        data: new FormData(this),
-                        dataType: 'JSON',
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        success: function(response) {
-                            if (response.status == 200) {
-                                $("#updateForm")[0].reset();
-                                $('.modal-edit').modal('hide');
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter',
-                                            Swal
-                                            .stopTimer)
-                                        toast.addEventListener('mouseleave',
-                                            Swal
-                                            .resumeTimer)
-                                    }
-                                })
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: response.message
-                                })
-                                window.setTimeout(function() {
-                                    location.reload(true)
-                                }, 2100)
-                                // location.reload(true);
-                            } else {
-                                // alert('problem');
-                                $('#update_validation_error').html("");
-                                $('#update_validation_error').addClass(
-                                    'alert alert-danger');
-                                $.each(response.error, function(key, err_value) {
-                                    $('#update_validation_error').append(
-                                        '<li>' +
-                                        err_value + '</li>');
-                                });
-                                $('.updateButton').text('Update')
-                            }
-                        }
-                    });
+           
+            $(document).on('click','.editButton',function(e) {
+                e.preventDefault();
+                var id = $(this).val();
+                var asset_path= "{{ asset('assets/img/customer/') }}"
+                var url =
+                "{{ route('customers.edit', ':id') }}"; //resource route  parameter passed
+                url = url.replace(':id', id); //resource route  parameter passed
+                $.ajax({
+                    type: "get",
+                    url: url, //passing id with route name
+                    success: function(response) {
+                        // console.log(response.mobile);
+                        $('#id').val(response.id);
+                        $('#full_name').val(response.full_name);
+                        $('#customerAddress').val(response.address);
+                        $('#mobileNumber').val(response.mobile);
+                        $('#emailID').val(response.email);
+                        $('#customerPassword').val(response.password);
+                        $('#previous-images').html(
+                            ' <img style="width:100px;height:100px" src="'+asset_path+'/'+
+                            response.photo + '" >');
+                    }
                 });
             });
+
+            // update
+            $(document).on('submit','#updateForm', function(e) {
+                e.preventDefault();
+                var id = $('#id').val();
+                // console.log(id);
+                $('.updateButton').html(
+                    '<span class="spinner-border spinner-border-sm"></span>')
+                var url = "{{ route('customers.update', ':id') }}"
+                url = url.replace(':id', id);
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    data: new FormData(this),
+                    dataType: 'JSON',
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.status == 200) {
+                            $("#updateForm")[0].reset();
+                            $('.modal-edit').modal('hide');
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter',
+                                        Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave',
+                                        Swal
+                                        .resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message
+                            })
+                            window.setTimeout(function() {
+                                location.reload(true)
+                            }, 2100)
+                            // location.reload(true);
+                        } else {
+                            // alert('problem');
+                            $('#update_validation_error').html("");
+                            $('#update_validation_error').addClass(
+                                'alert alert-danger');
+                            $.each(response.error, function(key, err_value) {
+                                $('#update_validation_error').append(
+                                    '<li>' +
+                                    err_value + '</li>');
+                            });
+                            $('.updateButton').text('Update')
+                        }
+                    }
+                });
+            });
+            
 
 
             // delete
