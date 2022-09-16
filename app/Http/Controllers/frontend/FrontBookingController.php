@@ -8,6 +8,7 @@ use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class FrontBookingController extends Controller
@@ -226,5 +227,13 @@ class FrontBookingController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+
+    public function myBookings(){
+        $myBooking= Booking::where('customer_id',Auth::guard('customer')->user()->id)->with('withroom')->get();
+        // dd($myBooking);
+        return view('frontend.layouts.room.myBookings',compact('myBooking'));
     }
 }

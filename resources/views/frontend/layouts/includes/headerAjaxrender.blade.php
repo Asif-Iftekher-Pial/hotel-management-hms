@@ -15,7 +15,7 @@
                         <a href="#"><i class="fa fa-tripadvisor"></i></a>
                         <a href="#"><i class="fa fa-instagram"></i></a>
                     </div>
-                    <a href="#" class="bk-btn">Reserved({{ App\Models\Booking::where('customer_id',Auth::guard('customer')->user()->id)->count() }})</a>
+                    <a href="{{ route('front.allRooms') }}" class="bk-btn">Reserved</a>
                     <div class="language-option">
                         @if(Auth::guard('customer')->user())
                             <img src="{{ asset('assets/img/customer/'.Auth::guard('customer')->user()->photo) }}" alt="" style="  width: 36px;
@@ -24,7 +24,7 @@
                             <div class="flag-dropdown">
                                 <ul>
                                     <li><a href="#">Profile</a></li>
-                                    <li><a href="#">My Rooms({{ App\Models\Booking::where('customer_id',Auth::guard('customer')->user()->id)->count() }})</a></li>
+                                    <li><a href="{{ route('myBookings') }}">My Rooms({{ App\Models\Booking::where('customer_id',Auth::guard('customer')->user()->id)->count() }})</a></li>
                                     <li><a href="{{ route('front.customerLogout') }}">Logout</a></li>
                                 </ul>
                             </div>

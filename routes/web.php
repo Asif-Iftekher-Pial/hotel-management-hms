@@ -1,18 +1,19 @@
 <?php
 
-use App\Http\Controllers\backend\AdminController;
-use App\Http\Controllers\backend\BookingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\HomeController;
 use App\Http\Controllers\backend\RoomController;
-use App\Http\Controllers\backend\CustomerController;
-use App\Http\Controllers\backend\DepartmentController;
-use App\Http\Controllers\backend\RoomServiceController;
+use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\backend\StaffController;
-use App\Http\Controllers\frontend\FrontAuthController;
-use App\Http\Controllers\frontend\FrontBookingController;
-use App\Http\Controllers\frontend\FrontHomeController;
+use App\Http\Controllers\backend\BookingController;
 use App\Http\Controllers\frontend\ReviewController;
+use App\Http\Controllers\backend\CustomerController;
+use App\Http\Controllers\SslCommerzPaymentController;
+use App\Http\Controllers\backend\DepartmentController;
+use App\Http\Controllers\frontend\FrontAuthController;
+use App\Http\Controllers\frontend\FrontHomeController;
+use App\Http\Controllers\backend\RoomServiceController;
+use App\Http\Controllers\frontend\FrontBookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +99,25 @@ Route::get('/room-availability',[FrontBookingController::class,'availabileRooms'
 Route::get('/all-room',[FrontBookingController::class,'allRooms'])->name('front.allRooms');
 Route::get('/room-detail/{id}',[FrontBookingController::class,'room_detail'])->name('front.room_detail');
 Route::post('/check-room-availability',[FrontBookingController::class,'checkAvailability'])->name('checkAvailability');
+Route::get('/my-bookings',[FrontBookingController::class,'myBookings'])->name('myBookings');
 
 // review
 Route::resource('/customer-review',ReviewController::class);
+
+
+
+
+
+// SSLCOMMERZ Start
+Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+//SSLCOMMERZ END
