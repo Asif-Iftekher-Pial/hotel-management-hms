@@ -109,7 +109,7 @@ Route::resource('/customer-review',ReviewController::class);
 
 
 // SSLCOMMERZ Start
-Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+Route::get('/example1/{room_id}/{booking_id}', [SslCommerzPaymentController::class, 'exampleEasyCheckout'])->name('pay_bill');
 Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 
 Route::post('/pay', [SslCommerzPaymentController::class, 'index']);

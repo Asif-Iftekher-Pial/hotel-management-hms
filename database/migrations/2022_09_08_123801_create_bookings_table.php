@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('total_children');
             $table->string('checkin');
             $table->string('checkout');
+            $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
             $table->timestamps();
         });
     }

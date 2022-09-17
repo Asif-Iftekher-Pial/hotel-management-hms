@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // use DB;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Library\SslCommerz\SslCommerzNotification;
@@ -10,13 +11,17 @@ use App\Library\SslCommerz\SslCommerzNotification;
 class SslCommerzPaymentController extends Controller
 {
 
-    public function exampleEasyCheckout()
+    public function exampleEasyCheckout($room_id,$booking_id)
     {
-        return view('exampleEasycheckout');
+        $booking_id=$booking_id;
+        $room=Room::where('id',$room_id)->with('roomType')->first();
+        //  dd($room);
+        return view('exampleEasycheckout',compact('room','booking_id'));
     }
 
     public function exampleHostedCheckout()
     {
+        // dd('hosted');
         return view('exampleHosted');
     }
 
@@ -25,7 +30,7 @@ class SslCommerzPaymentController extends Controller
         # Here you have to receive all the order data to initate the payment.
         # Let's say, your oder transaction informations are saving in a table called "orders"
         # In "orders" table, order unique identity is "transaction_id". "status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
-
+        //  dd($request->all());
         $post_data = array();
         $post_data['total_amount'] = '10'; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
@@ -91,26 +96,40 @@ class SslCommerzPaymentController extends Controller
 
     public function payViaAjax(Request $request)
     {
-        dd($request->all());
+          $jasonData = $request->cart_json;
+          $decode= json_decode($jasonData,true);
+        //   dd($decode['cus_name']);
+        
         # Here you have to receive all the order data to initate the payment.
         # Lets your oder trnsaction informations are saving in a table called "orders"
         # In orders table order uniq identity is "transaction_id","status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
 
         $post_data = array();
-        $post_data['total_amount'] = '10'; # You cant not pay less than 10
+        $post_data['total_amount'] = $decode['amount']; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid(); // tran_id must be unique
 
+
+        # BOOKING INFORMATION
+        $post_data['booking_id'] = $decode['booking_id'];
+
+        # ROOM INFORMATION
+        $post_data['room_id'] = $decode['room_id'];
+
+
         # CUSTOMER INFORMATION
-        $post_data['cus_name'] = 'Customer Name';
-        $post_data['cus_email'] = 'customer@mail.com';
-        $post_data['cus_add1'] = 'Customer Address';
+        $post_data['cus_name'] = $decode['cus_name'];
+        $post_data['cus_email'] = $decode['cus_email'];
+        $post_data['cus_add1'] = $decode['cus_addr1'];
+        $post_data['cus_phone'] = $decode['cus_phone'];
+
+
+
         $post_data['cus_add2'] = "";
         $post_data['cus_city'] = "";
         $post_data['cus_state'] = "";
         $post_data['cus_postcode'] = "";
         $post_data['cus_country'] = "Bangladesh";
-        $post_data['cus_phone'] = '8801XXXXXXXXX';
         $post_data['cus_fax'] = "";
 
         # SHIPMENT INFORMATION
@@ -129,16 +148,18 @@ class SslCommerzPaymentController extends Controller
         $post_data['product_profile'] = "physical-goods";
 
         # OPTIONAL PARAMETERS
-        $post_data['value_a'] = "ref001";
+        $post_data['value_a'] = $decode['booking_id'];
         $post_data['value_b'] = "ref002";
         $post_data['value_c'] = "ref003";
         $post_data['value_d'] = "ref004";
-
+        
 
         #Before  going to initiate the payment order status need to update as Pending.
         $update_product = DB::table('orders')
             ->where('transaction_id', $post_data['tran_id'])
             ->updateOrInsert([
+                'booking_id' => $post_data['booking_id'],
+                'room_id' => $post_data['room_id'],
                 'name' => $post_data['cus_name'],
                 'email' => $post_data['cus_email'],
                 'phone' => $post_data['cus_phone'],
@@ -162,11 +183,13 @@ class SslCommerzPaymentController extends Controller
 
     public function success(Request $request)
     {
+        // return $request->all();
         echo "Transaction is Successful";
 
         $tran_id = $request->input('tran_id');
         $amount = $request->input('amount');
         $currency = $request->input('currency');
+        $booking_id = $request->input('value_a');
 
         $sslc = new SslCommerzNotification();
 
@@ -184,6 +207,10 @@ class SslCommerzPaymentController extends Controller
                 in order table as Processing or Complete.
                 Here you can also sent sms or email for successfull transaction to customer
                 */
+                $update_booking = DB::table('bookings')
+                    ->where('id', $booking_id)
+                    ->update(['payment_status' => 'paid']);
+
                 $update_product = DB::table('orders')
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Processing']);
@@ -194,6 +221,10 @@ class SslCommerzPaymentController extends Controller
                 That means IPN did not work or IPN URL was not set in your merchant panel and Transation validation failed.
                 Here you need to update order status as Failed in order table.
                 */
+                $update_booking = DB::table('bookings')
+                    ->where('id', $booking_id)
+                    ->update(['payment_status' => 'unpaid']);
+
                 $update_product = DB::table('orders')
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Failed']);
@@ -215,6 +246,7 @@ class SslCommerzPaymentController extends Controller
     public function fail(Request $request)
     {
         $tran_id = $request->input('tran_id');
+        $booking_id = $request->input('value_a');
 
         $order_detials = DB::table('orders')
             ->where('transaction_id', $tran_id)
@@ -224,6 +256,10 @@ class SslCommerzPaymentController extends Controller
             $update_product = DB::table('orders')
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Failed']);
+
+                $update_booking = DB::table('bookings')
+                    ->where('id', $booking_id)
+                    ->update(['payment_status' => 'unpaid']);
             echo "Transaction is Falied";
         } else if ($order_detials->status == 'Processing' || $order_detials->status == 'Complete') {
             echo "Transaction is already Successful";
@@ -236,12 +272,16 @@ class SslCommerzPaymentController extends Controller
     public function cancel(Request $request)
     {
         $tran_id = $request->input('tran_id');
+        $booking_id = $request->input('value_a');
 
         $order_detials = DB::table('orders')
             ->where('transaction_id', $tran_id)
             ->select('transaction_id', 'status', 'currency', 'amount')->first();
 
         if ($order_detials->status == 'Pending') {
+            $update_booking = DB::table('bookings')
+            ->where('id', $booking_id)
+            ->update(['payment_status' => 'unpaid']);
             $update_product = DB::table('orders')
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Canceled']);

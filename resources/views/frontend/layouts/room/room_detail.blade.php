@@ -20,7 +20,7 @@
     <!-- Button trigger modal -->
     @if (Auth::guard('customer')->user())
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade bookingModal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -260,8 +260,9 @@
                     processData: false,
                     cache: false,
                     success: function(response) {
-                         console.log(response);
+                        //  console.log(response);
                         if (response.status == 200) {
+                            $('.bookingModal').modal('hide');
                             Swal.fire(
                                 'Congratulation!',
                                 response.message,
@@ -269,6 +270,7 @@
                             )
                             $('#ajaxRender').html(response.headerRender);
                             $('#bookButton').text('Book Room')
+
                         } else if (response.status == 400) {
                             Swal.fire(
                                 'Oops!',

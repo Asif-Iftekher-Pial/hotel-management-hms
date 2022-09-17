@@ -22,13 +22,17 @@
                                 <div class="b-time"><i class="icon_clock_alt"></i>
                                     {{ carbon\Carbon::parse($item->created_at)->format('D-M-Y') }}</div>
                             </div>
+                            {{-- <input type="hidden" name="room_id" id="room_id" value="{{ $item->room_id }}"> --}}
+                            <input type="hidden" name="booking_id" value="{{ $item->id }}">
                         </div>
-                        {{-- <a href="#" class="btn btn-success btn-block">Pay Bill</a> --}}
-                        <button class="your-button-class" id="sslczPayBtn" token="if you have any token validation"
-                            postdata="your javascript arrays or objects which requires in backend"
-                            order="If you already have the transaction generated for current order"
-                            endpoint="/pay-via-ajax"> Pay Now
-                        </button>
+                        @if ($item->payment_status == 'unpaid')
+                        <a href="{{ route('pay_bill',[$item->room_id,$item->id]) }}" class="btn btn-warning btn-block"> Pay Bill</a>
+                        @else
+                            {{-- <span><i class="fas fa-envelope-open-dollar"></i>Paid</span> --}}
+                            <button class="btn  btn-success btn-block"><i class="fa fa-credit-card-alt"></i> Already Paid</button>
+
+                        @endif
+                        
                     </div>
                 @endforeach
             </div>

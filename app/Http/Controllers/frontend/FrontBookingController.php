@@ -118,7 +118,7 @@ class FrontBookingController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        //  dd($request->all());
         $validator = Validator::make($request->all(), [
             'room_id' => 'required',
             'customer_id' => 'required',
@@ -134,8 +134,9 @@ class FrontBookingController extends Controller
             $room_id = intval($string);
             $checkin = $request->checkin;
             $checkout = $request->checkout;
+            // dd($checkout);
             if ($checkin < $checkout) {
-                // dd($request->id);
+                
                 $booked_room = Booking::where([['room_id', $room_id], ['customer_id', $request->customer_id]])->exists();
                 if ($booked_room) {
                     // dd('you have already booked this room');
@@ -146,16 +147,9 @@ class FrontBookingController extends Controller
                 } else {
                     // dd('not found this room with this user ,so check their check in date');
                     $this_room = Booking::where('room_id', $room_id)->first();
-                    if ($this_room->checkout > $checkin) {
-                        // dd('this room is reserved in your checkin date ,please select farther date');
-                        return response()->json([
-                            'status' => 400,
-                            'message' => 'Already Reserved! Please select farther date'
-                        ]);
-                    } else {
-                        // dd('this room is free and available for bookings with valid check in date');
-
+                    if ($this_room == null) {
                         $booking = new Booking();
+                        $booking->customer_id = Auth::guard('customer')->user()->id;
                         $booking->room_id = $room_id;
                         $booking->checkin = $checkin;
                         $booking->checkout = $checkout;
@@ -173,6 +167,36 @@ class FrontBookingController extends Controller
                             abort(404);
                         }
                     }
+                    else {
+                        if($this_room->checkout > $checkin) {
+                        // dd('this room is reserved in your checkin date ,please select farther date');
+                        return response()->json([
+                            'status' => 400,
+                            'message' => 'Already Reserved! Please select farther date'
+                        ]);
+                        }
+                    } 
+                    // else {
+                        // dd('this room is free and available for bookings with valid check in date');
+
+                        // $booking = new Booking();
+                        // $booking->room_id = $room_id;
+                        // $booking->checkin = $checkin;
+                        // $booking->checkout = $checkout;
+                        // $booking->total_children = $request->total_children;
+                        // $booking->total_adults = $request->total_adults;
+                        // $status = $booking->save();
+                        // $headerRender = view('frontend.layouts.includes.headerAjaxrender')->render();
+                        // if ($status) {
+                        //     return response()->json([
+                        //         'status' => 200,
+                        //         'message' => 'Room booked successfully!',
+                        //         'headerRender' => $headerRender
+                        //     ]);
+                        // } else {
+                        //     abort(404);
+                        // }
+                    // }
                 }
             } else {
                 // checkin must be smaller then checkout
@@ -233,7 +257,7 @@ class FrontBookingController extends Controller
 
     public function myBookings(){
         $myBooking= Booking::where('customer_id',Auth::guard('customer')->user()->id)->with('withroom')->get();
-        // dd($myBooking);
+        //  dd($myBooking);
         return view('frontend.layouts.room.myBookings',compact('myBooking'));
     }
 }

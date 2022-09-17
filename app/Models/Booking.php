@@ -11,7 +11,7 @@ class Booking extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'customer_id','room_id','checkin','checkout','total_adults','total_children'
+        'customer_id','room_id','checkin','checkout','total_adults','total_children','payment_status'
     ];
 
     public function withcustomer()
